@@ -12,4 +12,5 @@ FEATURES:
 10. Trophy Case - Enterable Trophies for users to track National Championships, Bowl Games, Conference Championships and Rivalry Games.
 
 ISSUES:
+
   Will not build into standalone app properly.  When running `npm run dev` in VS Code Terminal, it runs properly.
