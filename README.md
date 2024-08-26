@@ -7,7 +7,7 @@ Simple GUI application for dynasty tracking year over year.
 FEATURES:
   1. Customizable Coach and School Name.
   2. Dark & Light Mode.
-  3. Schedule w/ Win/Loss/Tie and Score Tracker.  Will automatically update record and points for/against in year stats.
+  3. Schedule - Win/Loss/Tie and Score Tracker.  Will automatically update record and points for/against in year stats.
   4. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
   5. Recruiting Class Tracker - Enter recruits' name, star rating, position, rating, and potential.  Automatically tracked and stored year over year for easy viewability in the future.
   6. Transfer Class Tracker - Enter transfers' name, star rating, position, transfer direction(To/From), and potential.  Automatically tracked and stored year over year for easy viewability in the future.
