@@ -1,7 +1,7 @@
 FEATURES:
 
 1. Customizable Coach and School Name.
-2. Application Data Reset - *USE CAUTIOUSLY* Resets all application data and wipes any previously entered data/information.
+2. Application Data Reset - ***USE CAUTIOUSLY!*** - Resets all application data and wipes any previously entered data/information.
 3. Dark & Light Mode.
 4. Schedule - Win/Loss/Tie and Score Tracker. Will automatically update record and points for/against in year stats.
 5. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
