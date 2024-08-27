@@ -7,27 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Table } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { 
-  getCurrentYear, 
-  setCurrentYear, 
-  getSchedule, 
-  setSchedule, 
-  setYearStats, 
-  calculateStats,
-  Game, 
-  YearStats
-} from '@/utils/localStorage';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { getCurrentYear, setCurrentYear, getSchedule, setSchedule, setYearStats, calculateStats, Game, YearStats } from '@/utils/localStorage';
+import { validateScore, validateYear } from '@/utils/validationUtils';
+import { toast } from 'react-hot-toast'; // Assume we're using react-hot-toast for notifications
 
 const results = ['Win', 'Loss', 'Tie', 'Bye', 'N/A'] as const;
 
@@ -37,31 +20,37 @@ const TeamHome: React.FC = () => {
   const [currentSchedule, setCurrentSchedule] = useState<Game[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentRecord, setCurrentRecord] = useState({ wins: 0, losses: 0, ties: 0 });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const year = getCurrentYear();
-    setYear(year);
-    const schedule = getSchedule(year);
-    if (schedule.length === 0) {
-      const newSchedule = Array.from({ length: 19 }, (_, i) => ({ 
-        id: i, 
-        week: i, 
-        opponent: '', 
-        result: 'N/A', 
-        score: '' 
-      }));
-      setSchedule(year, newSchedule);
-      setCurrentSchedule(newSchedule);
-    } else {
-      // Ensure the schedule has 19 weeks
-      const updatedSchedule = Array.from({ length: 19 }, (_, i) => {
-        const existingGame = schedule.find(game => game.week === i);
-        return existingGame || { id: i, week: i, opponent: '', result: 'N/A', score: '' };
-      });
-      setCurrentSchedule(updatedSchedule);
-      setSchedule(year, updatedSchedule);
+    try {
+      const year = getCurrentYear();
+      setYear(year);
+      const schedule = getSchedule(year);
+      if (schedule.length === 0) {
+        const newSchedule = Array.from({ length: 19 }, (_, i) => ({ 
+          id: i, 
+          week: i, 
+          opponent: '', 
+          result: 'N/A', 
+          score: '' 
+        }));
+        setSchedule(year, newSchedule);
+        setCurrentSchedule(newSchedule);
+      } else {
+        const updatedSchedule = Array.from({ length: 19 }, (_, i) => {
+          const existingGame = schedule.find(game => game.week === i);
+          return existingGame || { id: i, week: i, opponent: '', result: 'N/A', score: '' };
+        });
+        setCurrentSchedule(updatedSchedule);
+        setSchedule(year, updatedSchedule);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast.error('Failed to load data. Please try again.');
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -82,7 +71,24 @@ const TeamHome: React.FC = () => {
       const updatedSchedule = prevSchedule.map(game => 
         game.week === week ? { ...game, [field]: value } : game
       );
-      setSchedule(currentYear, updatedSchedule);
+      
+      // Validate score if the field is 'score'
+      if (field === 'score' && !validateScore(value)) {
+        setErrors(prev => ({ ...prev, [`score-${week}`]: 'Invalid score format. Use "00-00".' }));
+      } else {
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[`score-${week}`];
+          return newErrors;
+        });
+      }
+
+      try {
+        setSchedule(currentYear, updatedSchedule);
+      } catch (error) {
+        console.error('Error saving schedule:', error);
+        toast.error('Failed to save schedule. Please try again.');
+      }
       return updatedSchedule;
     });
   };
@@ -114,6 +120,12 @@ const TeamHome: React.FC = () => {
   };
 
   const endYear = () => {
+    if (!validateYear(currentYear + 1)) {
+      toast.error('Invalid next year. Please check the year and try again.');
+      return;
+    }
+
+    try {
     // Save current year's schedule and stats
     setSchedule(currentYear, currentSchedule);
     const calculatedStats = calculateStats(currentSchedule);
@@ -135,6 +147,11 @@ const TeamHome: React.FC = () => {
     // Save the schedule to the year record
     const storedRecords = localStorage.getItem('yearRecords');
     let records = storedRecords ? JSON.parse(storedRecords) : [];
+    const allRecruits = JSON.parse(localStorage.getItem('allRecruits') || '[]');
+    const allTransfers = JSON.parse(localStorage.getItem('allTransfers') || '[]');
+    const yearRecruits = allRecruits.filter((recruit: any) => recruit.recruitedYear === currentYear);
+    const yearTransfers = allTransfers.filter((transfer: any) => transfer.transferYear === currentYear);
+
     const record = {
       year: currentYear,
       overallRecord: `${fullStats.wins}-${fullStats.losses}`,
@@ -144,6 +161,8 @@ const TeamHome: React.FC = () => {
       schedule: currentSchedule,
       pointsFor: pointsFor,
       pointsAgainst: pointsAgainst,
+      recruits: yearRecruits,
+      transfers: yearTransfers,
     };
     const existingRecordIndex = records.findIndex((r: any) => r.year === currentYear);
     if (existingRecordIndex !== -1) {
@@ -161,7 +180,7 @@ const TeamHome: React.FC = () => {
     // Reset schedule for new year
     const newSchedule = Array.from({ length: 19 }, (_, i) => ({ 
       id: i, 
-      week: i, // This will create weeks 0 to 18
+      week: i,
       opponent: '', 
       result: 'N/A', 
       score: '' 
@@ -170,11 +189,16 @@ const TeamHome: React.FC = () => {
     setSchedule(newYear, newSchedule);
   
     router.refresh();
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
+    toast.success('Year ended successfully. Welcome to the new season!');
+  } catch (error) {
+    console.error('Error ending year:', error);
+    toast.error('Failed to end the year. Please try again.');
   }
+};
+
+if (isLoading) {
+  return <div>Loading...</div>;
+}
 
   return (
     <div className="space-y-6">
@@ -191,8 +215,7 @@ const TeamHome: React.FC = () => {
       </Card>
       
       <Card>
-        <CardHeader className="text-xl font-semibold"> {currentYear} Schedule |  {currentRecord.wins} - {currentRecord.losses} {currentRecord.ties > 0 ? ` - ${currentRecord.ties}` : ''}
-          </CardHeader>
+        <CardHeader className="text-xl font-semibold text-center"> {currentYear} Schedule</CardHeader>
         <CardContent>
           <Table>
             <thead>
@@ -200,7 +223,7 @@ const TeamHome: React.FC = () => {
                 <th className="text-center w-1/12">Week</th>
                 <th className="text-center w-1/3">Opponent</th>
                 <th className="text-center w-1/6">Result</th>
-                <th className="text-center w-1/4">Score</th>
+                <th className="text-center w-1/4">Your Points - Opp Points</th>
               </tr>
             </thead>
             <tbody>
@@ -235,17 +258,20 @@ const TeamHome: React.FC = () => {
                     </Select>
                   </td>
                   <td className="text-center">
-                    <Input
-                      value={game.score}
-                      onChange={(e) => updateSchedule(game.week, 'score', e.target.value)}
-                      placeholder="Enter score"
-                      className="w-full text-center"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+                <Input
+                  value={game.score}
+                  onChange={(e) => updateSchedule(game.week, 'score', e.target.value)}
+                  placeholder="Enter score"
+                  className={`w-full text-center ${errors[`score-${game.week}`] ? 'border-red-500' : ''}`}
+                />
+                {errors[`score-${game.week}`] && (
+                  <p className="text-red-500 text-xs mt-1">{errors[`score-${game.week}`]}</p>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
         </CardContent>
       </Card>
 

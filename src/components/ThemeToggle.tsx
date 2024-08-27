@@ -1,12 +1,12 @@
 "use client"
 
-import * as React from "react"
+import React, { memo } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
 
-export function ThemeToggle() {
+export const ThemeToggle = memo(() => {
   const { setTheme, theme } = useTheme()
 
   return (
@@ -16,4 +16,6 @@ export function ThemeToggle() {
       <span className="sr-only">Toggle theme</span>
     </Button>
   )
-}
+})
+
+ThemeToggle.displayName = 'ThemeToggle';

@@ -2,6 +2,7 @@
   "name": "dynasty-manager",
   "version": "1.0.0",
   "description": "CFB25 Dynasty Manager",
+  "type": "module",
   "author": {
     "name": "KN1ME"
   },
@@ -10,33 +11,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "electron": "electron .",
-    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder"
+    "electron-dev": "concurrently \"cross-env NODE_ENV=development npm run dev\" \"wait-on http://localhost:3000 && cross-env NODE_ENV=development electron .\"",
+    "electron-build": "next build && electron-builder",
+    "electron-start": "cross-env NODE_ENV=production electron ."
   },
   "build": {
-    "appId": "com.example.ncaa-football-dynasty-tracker",
+    "appId": "com.example.dynasty-manager",
+    "productName": "Dynasty Manager",
     "files": [
-      "**/*",
-      "!**/*.ts",
-      "!*.code-workspace",
-      "!LICENSE.md",
-      "!package.json",
-      "!package-lock.json",
-      "!src/",
-      "!e2e/",
-      "!hooks/",
-      "!.gitignore",
-      "!readme.md"
+      "electron/**/*",
+      "src/**/*",
+      "public/**/*",
+      "out/**/*",
+      "package.json"
     ],
     "directories": {
-      "buildResources": "resources",
+      "buildResources": "public",
       "output": "dist"
     },
     "extraMetadata": {
       "main": "electron/main.cjs"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
     }
   },
   "dependencies": {
@@ -50,12 +50,15 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "electron-serve": "^2.0.0",
+    "electron-store": "^10.0.0",
+    "fix-esm": "^1.0.1",
     "lucide-react": "^0.417.0",
     "next": "14.2.5",
     "next-pwa": "^5.6.0",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"
@@ -65,9 +68,9 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^31.3.1",
     "electron-builder": "^24.13.3",
-    "electron-is-dev": "^3.0.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
     "postcss": "^8",

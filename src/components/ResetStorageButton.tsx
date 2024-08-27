@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { memo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -27,12 +27,12 @@ const resetLocalStorage = () => {
   localStorage.setItem('schoolName', JSON.stringify(''));
 
   // Initialize an empty schedule for the current year
-  const emptySchedule = Array.from({ length: 16 }, (_, i) => ({ 
-    id: i, 
-    week: i, 
-    opponent: '', 
-    result: 'N/A', 
-    score: '' 
+  const emptySchedule = Array.from({ length: 16 }, (_, i) => ({
+    id: i,
+    week: i,
+    opponent: '',
+    result: 'N/A',
+    score: ''
   }));
   localStorage.setItem(`schedule_${currentYear}`, JSON.stringify(emptySchedule));
 
@@ -40,7 +40,7 @@ const resetLocalStorage = () => {
   window.location.reload();
 };
 
-const ResetStorageButton: React.FC = () => {
+const ResetStorageButton: React.FC = memo(() => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -60,6 +60,8 @@ const ResetStorageButton: React.FC = () => {
       </AlertDialogContent>
     </AlertDialog>
   );
-};
+});
+
+ResetStorageButton.displayName = 'ResetStorageButton';
 
 export default ResetStorageButton;

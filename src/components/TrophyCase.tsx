@@ -65,8 +65,8 @@ const TrophyCase: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <Select
               value={newTrophy.type}
-              onValueChange={(value: 'National Championship' | 'Bowl Game' | 'Conference Championship' | 'Rivalry') => 
-                setNewTrophy({...newTrophy, type: value})
+              onValueChange={(value: 'National Championship' | 'Bowl Game' | 'Conference Championship' | 'Rivalry') =>
+                setNewTrophy({ ...newTrophy, type: value })
               }
             >
               <SelectTrigger>
@@ -79,9 +79,9 @@ const TrophyCase: React.FC = () => {
                 <SelectItem value="Rivalry">Rivalry</SelectItem>
               </SelectContent>
             </Select>
-            <Input 
+            <Input
               value={newTrophy.name}
-              onChange={(e) => setNewTrophy({...newTrophy, name: e.target.value})}
+              onChange={(e) => setNewTrophy({ ...newTrophy, name: e.target.value })}
               placeholder="Trophy Name"
             />
             <Button onClick={addTrophy}>Add Trophy</Button>
@@ -96,7 +96,7 @@ const TrophyCase: React.FC = () => {
             {sortedTrophies.map(trophy => (
               <Card key={trophy.id} className="flex flex-col items-center p-4">
                 <div className="text-4xl mb-2">
-                  {trophy.type === 'National Championship' && '🏅'}  
+                  {trophy.type === 'National Championship' && '🏅'}
                   {trophy.type === 'Bowl Game' && '🏆'}
                   {trophy.type === 'Conference Championship' && '🪙'}
                   {trophy.type === 'Rivalry' && '🏈'}
@@ -104,7 +104,7 @@ const TrophyCase: React.FC = () => {
                 <h3 className="font-bold">{trophy.name}</h3>
                 <p>{trophy.type}</p>
                 <p>{trophy.year}</p>
-                <Button 
+                <Button
                   onClick={() => removeTrophy(trophy.id)}
                   variant="destructive"
                   size="sm"

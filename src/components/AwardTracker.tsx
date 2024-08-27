@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table } from '@/components/ui/table';
-import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -17,19 +16,33 @@ interface Award {
 }
 
 const AwardTracker: React.FC = () => {
-  const [currentYear] = useLocalStorage<number>('currentYear', new Date().getFullYear());
-  const [allAwards, setAllAwards] = useLocalStorage<Award[]>('allAwards', []);
+  const [currentYear, setCurrentYear] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      return parseInt(localStorage.getItem('currentYear') || new Date().getFullYear().toString(), 10);
+    }
+    return new Date().getFullYear();
+  });
+  const [allAwards, setAllAwards] = useState<Award[]>(() => {
+    if (typeof window !== 'undefined') {
+      return JSON.parse(localStorage.getItem('allAwards') || '[]');
+    }
+    return [];
+  });
   const [newAward, setNewAward] = useState<Omit<Award, 'id' | 'year'>>({ playerName: '', awardName: '' });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
 
+  useEffect(() => {
+    localStorage.setItem('allAwards', JSON.stringify(allAwards));
+  }, [allAwards]);
+
   const awardsForSelectedYear = allAwards.filter(award => award.year === selectedYear);
 
   const addAward = () => {
-    setAllAwards([...allAwards, { 
-      ...newAward, 
+    setAllAwards([...allAwards, {
+      ...newAward,
       id: Date.now(),
-      year: selectedYear, // Use selectedYear instead of currentYear
+      year: selectedYear,
       playerName: capitalizeName(newAward.playerName)
     }]);
     setNewAward({ playerName: '', awardName: '' });
@@ -41,9 +54,9 @@ const AwardTracker: React.FC = () => {
   };
 
   const saveEdit = () => {
-    setAllAwards(allAwards.map(award => 
-      award.id === editingId 
-        ? { ...newAward, id: award.id, year: selectedYear, playerName: capitalizeName(newAward.playerName) } 
+    setAllAwards(allAwards.map(award =>
+      award.id === editingId
+        ? { ...newAward, id: award.id, year: selectedYear, playerName: capitalizeName(newAward.playerName) }
         : award
     ));
     setEditingId(null);
@@ -84,14 +97,14 @@ const AwardTracker: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <Input 
+            <Input
               value={newAward.playerName}
-              onChange={(e) => setNewAward({...newAward, playerName: e.target.value})}
+              onChange={(e) => setNewAward({ ...newAward, playerName: e.target.value })}
               placeholder="Player Name"
             />
-            <Input 
+            <Input
               value={newAward.awardName}
-              onChange={(e) => setNewAward({...newAward, awardName: e.target.value})}
+              onChange={(e) => setNewAward({ ...newAward, awardName: e.target.value })}
               placeholder="Award Name"
             />
             {editingId ? (

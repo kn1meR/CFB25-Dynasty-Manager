@@ -38,9 +38,9 @@ const TransferPortalTracker: React.FC = () => {
   const transfersForSelectedYear = allTransfers.filter(transfer => transfer.transferYear === selectedYear);
 
   const addTransfer = () => {
-    const transferToAdd = { 
-      ...newTransfer, 
-      id: Date.now(), 
+    const transferToAdd = {
+      ...newTransfer,
+      id: Date.now(),
       transferYear: selectedYear,
       playerName: capitalizeName(newTransfer.playerName),
       school: capitalizeName(newTransfer.school)
@@ -61,15 +61,15 @@ const TransferPortalTracker: React.FC = () => {
   };
 
   const saveEdit = () => {
-    setAllTransfers(allTransfers.map(transfer => 
-      transfer.id === editingId 
-        ? { 
-            ...newTransfer, 
-            id: transfer.id, 
-            transferYear: selectedYear, 
-            playerName: capitalizeName(newTransfer.playerName),
-            school: capitalizeName(newTransfer.school)
-          } 
+    setAllTransfers(allTransfers.map(transfer =>
+      transfer.id === editingId
+        ? {
+          ...newTransfer,
+          id: transfer.id,
+          transferYear: selectedYear,
+          playerName: capitalizeName(newTransfer.playerName),
+          school: capitalizeName(newTransfer.school)
+        }
         : transfer
     ));
     setEditingId(null);
@@ -122,14 +122,14 @@ const TransferPortalTracker: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
-            <Input 
+            <Input
               value={newTransfer.playerName}
-              onChange={(e) => setNewTransfer({...newTransfer, playerName: e.target.value})}
+              onChange={(e) => setNewTransfer({ ...newTransfer, playerName: e.target.value })}
               placeholder="Player Name"
             />
             <Select
               value={newTransfer.position}
-              onValueChange={(value) => setNewTransfer({...newTransfer, position: value})}
+              onValueChange={(value) => setNewTransfer({ ...newTransfer, position: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Position" />
@@ -142,7 +142,7 @@ const TransferPortalTracker: React.FC = () => {
             </Select>
             <Select
               value={newTransfer.stars}
-              onValueChange={(value) => setNewTransfer({...newTransfer, stars: value})}
+              onValueChange={(value) => setNewTransfer({ ...newTransfer, stars: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Stars" />
@@ -155,7 +155,7 @@ const TransferPortalTracker: React.FC = () => {
             </Select>
             <Select
               value={newTransfer.transferDirection}
-              onValueChange={(value) => setNewTransfer({...newTransfer, transferDirection: value as 'From' | 'To'})}
+              onValueChange={(value) => setNewTransfer({ ...newTransfer, transferDirection: value as 'From' | 'To' })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Transfer Direction" />
@@ -165,9 +165,9 @@ const TransferPortalTracker: React.FC = () => {
                 <SelectItem value="To">To</SelectItem>
               </SelectContent>
             </Select>
-            <Input 
+            <Input
               value={newTransfer.school}
-              onChange={(e) => setNewTransfer({...newTransfer, school: e.target.value})}
+              onChange={(e) => setNewTransfer({ ...newTransfer, school: e.target.value })}
               placeholder="School"
             />
             {editingId ? (

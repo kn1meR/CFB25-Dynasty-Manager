@@ -11,6 +11,12 @@ interface YearRecord {
   conferenceRecord: string;
   bowlGame: string;
   bowlResult: string;
+  playerAwards: PlayerAward[];
+}
+
+interface PlayerAward {
+  playerName: string;
+  awardName: string;
 }
 
 const YearRecords: React.FC = () => {
@@ -21,6 +27,7 @@ const YearRecords: React.FC = () => {
     conferenceRecord: '',
     bowlGame: '',
     bowlResult: '',
+    playerAwards: [],
   });
 
   useEffect(() => {
@@ -42,6 +49,7 @@ const YearRecords: React.FC = () => {
       conferenceRecord: '',
       bowlGame: '',
       bowlResult: '',
+      playerAwards: [],
     });
   };
 
@@ -55,6 +63,7 @@ const YearRecords: React.FC = () => {
     const updatedRecords = records.filter((_, i) => i !== index);
     setRecords(updatedRecords);
   };
+  
 
   return (
     <div className="space-y-6">

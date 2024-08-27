@@ -8,6 +8,8 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
+import { validateName, validateRating, validatePosition } from '@/utils/validationUtils';
+import { toast } from 'react-hot-toast';
 
 interface Player {
   id: number;
@@ -31,6 +33,7 @@ const Roster: React.FC = () => {
   const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id'>>({ name: '', position: '', year: '', rating: '' });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: 'asc' | 'desc' }>({ field: 'rating', direction: 'desc' });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     // Automatically sort players by rating when the component mounts or players change
@@ -42,7 +45,7 @@ const Roster: React.FC = () => {
       const yearDiff = yearOrder[a.year] - yearOrder[b.year];
       return sortConfig.direction === 'asc' ? yearDiff : -yearDiff;
     } else if (sortConfig.field === 'rating') {
-      return sortConfig.direction === 'asc' 
+      return sortConfig.direction === 'asc'
         ? parseInt(a.rating) - parseInt(b.rating)
         : parseInt(b.rating) - parseInt(a.rating);
     } else {
@@ -60,8 +63,35 @@ const Roster: React.FC = () => {
   };
 
   const addPlayer = () => {
-    setPlayers([...players, { ...newPlayer, id: Date.now(), name: capitalizeName(newPlayer.name) }]);
-    setNewPlayer({ name: '', position: '', year: '', rating: '' });
+    if (validatePlayer(newPlayer)) {
+      try {
+        setPlayers([...players, { ...newPlayer, id: Date.now(), name: capitalizeName(newPlayer.name) }]);
+        setNewPlayer({ name: '', position: '', year: '', rating: '' });
+        toast.success('Player added successfully!');
+      } catch (error) {
+        console.error('Error adding player:', error);
+        toast.error('Failed to add player. Please try again.');
+      }
+    } else {
+      toast.error('Please correct the errors before adding the player.');
+    }
+  };
+
+  const updatePlayer = (index: number, field: keyof Player, value: string) => {
+    const updatedPlayers = [...players];
+    updatedPlayers[index] = { ...updatedPlayers[index], [field]: value };
+
+    if (validatePlayer(updatedPlayers[index])) {
+      try {
+        setPlayers(updatedPlayers);
+        toast.success('Player updated successfully!');
+      } catch (error) {
+        console.error('Error updating player:', error);
+        toast.error('Failed to update player. Please try again.');
+      }
+    } else {
+      toast.error('Please correct the errors before updating the player.');
+    }
   };
 
   const startEditing = (player: Player) => {
@@ -70,9 +100,9 @@ const Roster: React.FC = () => {
   };
 
   const saveEdit = () => {
-    setPlayers(players.map(player => 
-      player.id === editingId 
-        ? { ...newPlayer, id: player.id, name: capitalizeName(newPlayer.name) } 
+    setPlayers(players.map(player =>
+      player.id === editingId
+        ? { ...newPlayer, id: player.id, name: capitalizeName(newPlayer.name) }
         : player
     ));
     setEditingId(null);
@@ -88,6 +118,23 @@ const Roster: React.FC = () => {
     setPlayers(players.filter(player => player.id !== id));
   };
 
+  const validatePlayer = (player: Omit<Player, 'id'>): boolean => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!validateName(player.name)) {
+      newErrors.name = 'Invalid name. Please enter a non-empty name up to 100 characters.';
+    }
+    if (!validatePosition(player.position)) {
+      newErrors.position = 'Invalid position. Please select a valid position.';
+    }
+    if (!validateRating(player.rating)) {
+      newErrors.rating = 'Invalid rating. Please enter a number between 0 and 99.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-center">Roster</h1>
@@ -98,14 +145,16 @@ const Roster: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-            <Input 
-              value={newPlayer.name} 
-              onChange={(e) => setNewPlayer({...newPlayer, name: e.target.value})} 
+            <Input
+              value={newPlayer.name}
+              onChange={(e) => setNewPlayer({ ...newPlayer, name: e.target.value })}
               placeholder="Name"
+              className={errors.name ? 'border-red-500' : ''}
             />
-            <Select 
-              value={newPlayer.position} 
-              onValueChange={(value) => setNewPlayer({...newPlayer, position: value})}
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            <Select
+              value={newPlayer.position}
+              onValueChange={(value) => setNewPlayer({ ...newPlayer, position: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Position" />
@@ -116,9 +165,9 @@ const Roster: React.FC = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Select 
-              value={newPlayer.year} 
-              onValueChange={(value) => setNewPlayer({...newPlayer, year: value})}
+            <Select
+              value={newPlayer.year}
+              onValueChange={(value) => setNewPlayer({ ...newPlayer, year: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Year" />
@@ -129,11 +178,13 @@ const Roster: React.FC = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Input 
-              value={newPlayer.rating} 
-              onChange={(e) => setNewPlayer({...newPlayer, rating: e.target.value})} 
+            <Input
+              value={newPlayer.rating}
+              onChange={(e) => setNewPlayer({ ...newPlayer, rating: e.target.value })}
               placeholder="Rating"
+              className={errors.rating ? 'border-red-500' : ''}
             />
+            {errors.rating && <p className="text-red-500 text-xs mt-1">{errors.rating}</p>}
             {editingId ? (
               <div className="flex space-x-2">
                 <Button onClick={saveEdit}>Save</Button>

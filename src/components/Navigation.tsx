@@ -1,12 +1,12 @@
 "use client";
 
-import React from 'react';
+import React, { memo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import CoachProfile from './CoachProfile';
 import { ThemeToggle } from './ThemeToggle';
 
-const Navigation: React.FC = () => {
+const Navigation: React.FC = memo(() => {
   const pathname = usePathname();
 
   const navItems = [
@@ -24,8 +24,8 @@ const Navigation: React.FC = () => {
       <ul className="flex space-x-4">
         {navItems.map((item) => (
           <li key={item.name}>
-            <Link 
-              href={item.path} 
+            <Link
+              href={item.path}
               className={`${pathname === item.path ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'} hover:text-blue-800 dark:hover:text-blue-300 transition-colors`}
             >
               {item.name}
@@ -39,6 +39,8 @@ const Navigation: React.FC = () => {
       </div>
     </nav>
   );
-};
+});
+
+Navigation.displayName = 'Navigation';
 
 export default Navigation;

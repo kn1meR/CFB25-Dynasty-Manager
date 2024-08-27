@@ -15,10 +15,10 @@ const Records: React.FC = () => {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold text-center mb-8">Season Stats</h1>
-      
+
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
         {years.map(year => (
-          <Button 
+          <Button
             key={year}
             className="w-full h-16 text-lg font-semibold"
             onClick={() => setSelectedYear(year)}
@@ -29,8 +29,8 @@ const Records: React.FC = () => {
       </div>
 
       {selectedYear && (
-        <YearRecordModal 
-          year={selectedYear} 
+        <YearRecordModal
+          year={selectedYear}
           onClose={() => setSelectedYear(null)}
         />
       )}

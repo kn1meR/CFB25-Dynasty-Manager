@@ -1,21 +1,33 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import useLocalStorage from '@/hooks/useLocalStorage';
 import ResetStorageButton from '@/components/ResetStorageButton';
 import { User, School } from 'lucide-react';
 
-const CoachProfile: React.FC = () => {
-  const [coachName, setCoachName] = useLocalStorage('coachName', '');
-  const [schoolName, setSchoolName] = useLocalStorage('schoolName', '');
+const CoachProfile: React.FC = memo(() => {
+  const [coachName, setCoachName] = useState('');
+  const [schoolName, setSchoolName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setCoachName(localStorage.getItem('coachName') || '');
+    setSchoolName(localStorage.getItem('schoolName') || '');
+    setIsLoaded(true);
+  }, []);
 
   const handleSave = () => {
+    localStorage.setItem('coachName', coachName);
+    localStorage.setItem('schoolName', schoolName);
     setIsEditing(false);
   };
+
+  if (!isLoaded) {
+    return null;
+  }
 
   if (isEditing) {
     return (
@@ -38,7 +50,7 @@ const CoachProfile: React.FC = () => {
             />
           </div>
           <Button onClick={handleSave} className="w-full">Save</Button>
-          <ResetStorageButton />        
+          <ResetStorageButton />
         </CardContent>
       </Card>
     );
@@ -52,6 +64,9 @@ const CoachProfile: React.FC = () => {
       <span>{schoolName || 'School'}</span>
     </Button>
   );
-};
+});
+
+
+CoachProfile.displayName = 'CoachProfile';
 
 export default CoachProfile;

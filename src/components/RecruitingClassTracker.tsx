@@ -98,14 +98,14 @@ const RecruitingClassTracker: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
-            <Input 
-              value={newRecruit.name} 
-              onChange={(e) => setNewRecruit({...newRecruit, name: e.target.value})} 
+            <Input
+              value={newRecruit.name}
+              onChange={(e) => setNewRecruit({ ...newRecruit, name: e.target.value })}
               placeholder="Name"
             />
             <Select
               value={newRecruit.stars}
-              onValueChange={(value) => setNewRecruit({...newRecruit, stars: value})}
+              onValueChange={(value) => setNewRecruit({ ...newRecruit, stars: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Stars" />
@@ -118,7 +118,7 @@ const RecruitingClassTracker: React.FC = () => {
             </Select>
             <Select
               value={newRecruit.position}
-              onValueChange={(value) => setNewRecruit({...newRecruit, position: value})}
+              onValueChange={(value) => setNewRecruit({ ...newRecruit, position: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Position" />
@@ -129,14 +129,14 @@ const RecruitingClassTracker: React.FC = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Input 
-              value={newRecruit.rating} 
-              onChange={(e) => setNewRecruit({...newRecruit, rating: e.target.value})} 
+            <Input
+              value={newRecruit.rating}
+              onChange={(e) => setNewRecruit({ ...newRecruit, rating: e.target.value })}
               placeholder="Rating"
             />
             <Select
               value={newRecruit.potential}
-              onValueChange={(value) => setNewRecruit({...newRecruit, potential: value})}
+              onValueChange={(value) => setNewRecruit({ ...newRecruit, potential: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Potential" />
