@@ -49,6 +49,8 @@ interface YearRecord {
   recruits?: Recruit[];
   transfers?: Transfer[];
   playerAwards: Award[];
+  recruitingClassPlacement: string;
+  playersDrafted: DraftedPlayer[];
 }
 
 interface Award {
@@ -56,6 +58,11 @@ interface Award {
   playerName: string;
   awardName: string;
   year: number;
+}
+
+interface DraftedPlayer {
+  playerName: string;
+  round: string;
 }
 
 interface YearRecordModalProps {
@@ -78,6 +85,8 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
     recruits: [],
     transfers: [],
     playerAwards: [],
+    recruitingClassPlacement: '',
+    playersDrafted: [],
   });
 
   useEffect(() => {
@@ -93,6 +102,7 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
         setRecord({
           ...existingRecord,
           schedule: existingRecord.schedule || record.schedule,
+          playersDrafted: existingRecord.playersDrafted || [],
         });
       }
     }
@@ -137,6 +147,24 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
       updatedSchedule[index] = { ...updatedSchedule[index], [field]: value };
       setRecord({ ...record, schedule: updatedSchedule });
     }
+  };
+
+  const addDraftedPlayer = () => {
+    setRecord(prev => ({
+      ...prev,
+      playersDrafted: [...prev.playersDrafted, { playerName: '', round: '' }]
+    }));
+  };
+
+  const updateDraftedPlayer = (index: number, field: keyof DraftedPlayer, value: string) => {
+    const updatedPlayersDrafted = [...record.playersDrafted];
+    updatedPlayersDrafted[index] = { ...updatedPlayersDrafted[index], [field]: value };
+    setRecord({ ...record, playersDrafted: updatedPlayersDrafted });
+  };
+
+  const removeDraftedPlayer = (index: number) => {
+    const updatedPlayersDrafted = record.playersDrafted.filter((_, i) => i !== index);
+    setRecord({ ...record, playersDrafted: updatedPlayersDrafted });
   };
 
   return (
@@ -229,6 +257,15 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                  <label htmlFor="classRanking" className="text-right">Recruiting Class Rank:</label>
+                  <Input
+                    id="classRanking"
+                    value={record.recruitingClassPlacement}
+                    onChange={(e) => setRecord({ ...record, recruitingClassPlacement: e.target.value })}
+                    className="col-span-2"
+                  />
+                </div>
             </ScrollArea>
           </div>
           {record.schedule && (
@@ -336,23 +373,40 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
                   </tbody>
                 </Table>
 
-                <h4 className="text-lg font-semibold mt-4 text-center">Player Awards</h4>
+                <h4 className="text-lg font-semibold mt-4 text-center">Players Drafted</h4>
                 <Table>
                   <thead>
                     <tr>
                       <th>Player Name</th>
-                      <th>Award</th>
+                      <th>Round</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {record.playerAwards.map((award, index) => (
+                    {record.playersDrafted.map((player, index) => (
                       <tr key={index}>
-                        <td style={{ textAlign: 'center' }}>{award.playerName}</td>
-                        <td style={{ textAlign: 'center' }}>{award.awardName}</td>
+                        <td>
+                          <Input
+                            value={player.playerName}
+                            onChange={(e) => updateDraftedPlayer(index, 'playerName', e.target.value)}
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            value={player.round}
+                            onChange={(e) => updateDraftedPlayer(index, 'round', e.target.value)}
+                          />
+                        </td>
+                        <td>
+                          <Button onClick={() => removeDraftedPlayer(index)} variant="destructive" size="sm">
+                            Remove
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
+                <Button onClick={addDraftedPlayer} className="w-full">Add Drafted Player</Button>
               </div>
             </ScrollArea>
           </div>

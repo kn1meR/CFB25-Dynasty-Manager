@@ -8,6 +8,7 @@ import { Table } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
+import { fbsTeams } from '@/utils/fbsTeams';
 
 interface Transfer {
   id: number;
@@ -43,7 +44,6 @@ const TransferPortalTracker: React.FC = () => {
       id: Date.now(),
       transferYear: selectedYear,
       playerName: capitalizeName(newTransfer.playerName),
-      school: capitalizeName(newTransfer.school)
     };
     setAllTransfers([...allTransfers, transferToAdd]);
     setNewTransfer({
@@ -68,7 +68,6 @@ const TransferPortalTracker: React.FC = () => {
           id: transfer.id,
           transferYear: selectedYear,
           playerName: capitalizeName(newTransfer.playerName),
-          school: capitalizeName(newTransfer.school)
         }
         : transfer
     ));
@@ -128,19 +127,6 @@ const TransferPortalTracker: React.FC = () => {
               placeholder="Player Name"
             />
             <Select
-              value={newTransfer.position}
-              onValueChange={(value) => setNewTransfer({ ...newTransfer, position: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Position" />
-              </SelectTrigger>
-              <SelectContent>
-                {positions.map(pos => (
-                  <SelectItem key={pos} value={pos}>{pos}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
               value={newTransfer.stars}
               onValueChange={(value) => setNewTransfer({ ...newTransfer, stars: value })}
             >
@@ -150,6 +136,19 @@ const TransferPortalTracker: React.FC = () => {
               <SelectContent>
                 {starOptions.map(stars => (
                   <SelectItem key={stars} value={stars}>{stars} ★</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              value={newTransfer.position}
+              onValueChange={(value) => setNewTransfer({ ...newTransfer, position: value })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Position" />
+              </SelectTrigger>
+              <SelectContent>
+                {positions.map(pos => (
+                  <SelectItem key={pos} value={pos}>{pos}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -165,11 +164,19 @@ const TransferPortalTracker: React.FC = () => {
                 <SelectItem value="To">To</SelectItem>
               </SelectContent>
             </Select>
-            <Input
+            <Select
               value={newTransfer.school}
-              onChange={(e) => setNewTransfer({ ...newTransfer, school: e.target.value })}
-              placeholder="School"
-            />
+              onValueChange={(value) => setNewTransfer({ ...newTransfer, school: value })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="School" />
+              </SelectTrigger>
+              <SelectContent>
+                {fbsTeams.map(school => (
+                  <SelectItem key={school} value={school}>{school}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {editingId ? (
               <div className="flex space-x-2">
                 <Button onClick={saveEdit}>Save</Button>
@@ -193,8 +200,8 @@ const TransferPortalTracker: React.FC = () => {
             <thead>
               <tr>
                 <th className="text-center">Player Name</th>
-                <th className="text-center">Position</th>
                 <th className="text-center">Stars</th>
+                <th className="text-center">Position</th>
                 <th className="text-center">Transfer Direction</th>
                 <th className="text-center">School</th>
                 <th className="text-center">Actions</th>
@@ -204,8 +211,8 @@ const TransferPortalTracker: React.FC = () => {
               {transfersForSelectedYear.map(transfer => (
                 <tr key={transfer.id}>
                   <td className="text-center">{transfer.playerName}</td>
-                  <td className="text-center">{transfer.position}</td>
                   <td className="text-center">{transfer.stars} ★</td>
+                  <td className="text-center">{transfer.position}</td>
                   <td className="text-center">{transfer.transferDirection}</td>
                   <td className="text-center">{transfer.school}</td>
                   <td className="text-center">

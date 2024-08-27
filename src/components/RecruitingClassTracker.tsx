@@ -101,7 +101,7 @@ const RecruitingClassTracker: React.FC = () => {
             <Input
               value={newRecruit.name}
               onChange={(e) => setNewRecruit({ ...newRecruit, name: e.target.value })}
-              placeholder="Name"
+              placeholder="Player Name"
             />
             <Select
               value={newRecruit.stars}

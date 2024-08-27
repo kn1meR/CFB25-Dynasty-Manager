@@ -148,7 +148,7 @@ const Roster: React.FC = () => {
             <Input
               value={newPlayer.name}
               onChange={(e) => setNewPlayer({ ...newPlayer, name: e.target.value })}
-              placeholder="Name"
+              placeholder="Player Name"
               className={errors.name ? 'border-red-500' : ''}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
