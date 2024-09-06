@@ -13,7 +13,8 @@ FEATURES:
 
 ISSUES:
 
-  Will not build into standalone app properly.  After installing node and all dependencies in `packages.json`, running `npm run dev` in VS Code Terminal runs the application properly as intended.
+  Will not build into standalone app properly.  
+  After installing node and all dependencies in `package.json`, running `npm run dev` in VS Code Terminal runs the application properly as intended.
 
 
 ![image](https://github.com/user-attachments/assets/2da9b4f5-ccef-475d-a12d-2f3d17d8b1f9)
