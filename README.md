@@ -21,7 +21,7 @@ HOW TO USE: (s/o ALostTraveler24 on Reddit)
 
     4. Once everything is installed, in the same folder, run npm run dev and the program will start, then navigate in a browser (unless it auto-loads for you) to localhost:3000
 
-I think that's everything, when you're done with the app, you should probably end the process in the terminal ctr+c should do the trick and then everytime you want to use it again, just run the last step again and it should load up with the relevant data.
+      I think that's everything, when you're done with the app, you should probably end the process in the terminal ctr+c should do the trick and then everytime you want to use it again, just run the last step again and it should load up with the relevant data.
 
 
 ISSUES:
