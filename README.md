@@ -5,7 +5,8 @@ FEATURES:
 3. Dark & Light Mode.
 4. Schedule - Win/Loss/Tie and Score Tracker. Will automatically update record and points for/against in year stats.
 5. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
-          - **NEW:**(**UPLOAD SCREENSHOTS TO HAVE ROSTER AUTO ADDED**)  
+   
+   **NEW:** **UPLOAD SCREENSHOTS TO HAVE ROSTER AUTO ADDED** 
 7. Recruiting Class Tracker - Enter recruits' name, star rating, position, rating, and potential. Automatically tracked and stored year over year for easy viewability in the future.
 8. Transfer Class Tracker - Enter transfers' name, star rating, position, transfer direction(To/From), and potential. Automatically tracked and stored year over year for easy viewability in the future.
 9. Season Stats - Buttons for all 30 years. Stats tracked are Record, Conference Record, Points For, Points Against, Bowl Game & Result, National Champion, Heisman Record, and Schedule w/ Opponent and Result with Score.
@@ -15,7 +16,7 @@ FEATURES:
 
 HOW TO USE: (s/o ALostTraveler24 on Reddit)
 
-1. First you need to verify that you have `node.js` on your device. You can install it from the linked website, but if you want to check if you have it already, load up your device's terminal/console and type in `node -v`  https://nodejs.org/en/download/package-manager/current
+1. First you need to verify that you have `node.js` on your device. You can install it from the linked website, but if you want to check if you have it already, load up your device's terminal/console and type in `node -v`          https://nodejs.org/en/download/package-manager/current
 2. Once that's done, you want to clone the repository. For that you need git and then you can either use the command prompt `git clone <repo url>` or you can download Github Desktop which might be a bit easier if you are new to git and don't use it at all other than for this.
 3. Once the repo is cloned, you need to use the terminal again. Go into the folder containing the cloned repo, `cd <folder_path>` and then run `npm install --force`. This will install most of the dependencies, but there are two that you have to install yourself `framer-motion` and `radix-ui/react-popover`
 4. Once everything is installed, in the same folder, run `npm run dev` and the program will start. Then navigate in a browser (unless it auto-loads for you) to `localhost:3000`
