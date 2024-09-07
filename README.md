@@ -12,6 +12,7 @@ FEATURES:
 10. Player Awards - Enterable player awards tracked on a year-to-year basis for easy viewabilty in the future.
 11. Trophy Case - Enterable Trophies for users to track National Championships, Bowl Games, Conference Championships and Rivalry Games.
 
+
 HOW TO USE: (s/o ALostTraveler24 on Reddit)
 
 1. First you need to verify that you have `node.js` on your device. You can install it from the linked website, but if you want to check if you have it already, load up your device's terminal/console and type in `node -v`  https://nodejs.org/en/download/package-manager/current
