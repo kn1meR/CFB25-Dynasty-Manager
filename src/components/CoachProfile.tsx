@@ -5,19 +5,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { User, School, Edit2 } from 'lucide-react';
+import { User, School, Edit2, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ResetStorageButton from '@/components/ResetStorageButton';
+import { getCurrentYear } from '@/utils/localStorage';
 
 const CoachProfile: React.FC = memo(() => {
   const [coachName, setCoachName] = useState('');
   const [schoolName, setSchoolName] = useState('');
+  const [currentYear, setCurrentYear] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setCoachName(localStorage.getItem('coachName') || '');
     setSchoolName(localStorage.getItem('schoolName') || '');
+    setCurrentYear(getCurrentYear() || 0)
     setIsLoaded(true);
   }, []);
 
@@ -50,6 +53,8 @@ const CoachProfile: React.FC = memo(() => {
                 <span className="font-semibold">{coachName}</span>
                 <School size={18} className="text-green-500" />
                 <span className="font-semibold">{schoolName}</span>
+                <Calendar size={18} className='text-red-500' />
+                <span className='font-semibold'>{currentYear}</span>
               </motion.div>
             ) : (
               <motion.div
@@ -60,6 +65,8 @@ const CoachProfile: React.FC = memo(() => {
               >
                 <Edit2 size={18} />
                 <span>Set Coach & School</span>
+                <Calendar size={18} className='text-red-500' />
+                <span className='font-semibold'>{currentYear}</span>
               </motion.div>
             )}
           </AnimatePresence>
