@@ -11,10 +11,12 @@ const Navigation: React.FC = memo(() => {
 
   const navItems = [
     { name: 'Team Home', path: '/' },
+    { name: 'Top 25', path: '/top25' },
     { name: 'Roster', path: '/roster' },
     { name: 'Recruiting', path: '/recruiting' },
     { name: 'Transfers', path: '/transfers' },
     { name: 'Season Stats', path: '/records' },
+    { name: 'Player Stats', path: '/player-stats' },
     { name: 'Player Awards', path: '/awards' },
     { name: 'Trophy Case', path: '/trophy-case' }
   ];

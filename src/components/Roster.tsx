@@ -10,14 +10,9 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
 import { validateName, validateRating, validatePosition } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
+import RosterImageUpload from './RosterImageUpload';
+import { Player } from '@/types'; 
 
-interface Player {
-  id: number;
-  name: string;
-  position: string;
-  year: string;
-  rating: string;
-}
 
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
 const years = ['FR', 'FR (RS)', 'SO', 'SO (RS)', 'JR', 'JR (RS)', 'SR', 'SR (RS)'];
@@ -27,6 +22,8 @@ type SortField = 'name' | 'position' | 'year' | 'rating';
 const yearOrder: { [key: string]: number } = {
   'FR': 0, 'FR (RS)': 1, 'SO': 2, 'SO (RS)': 3, 'JR': 4, 'JR (RS)': 5, 'SR': 6, 'SR (RS)': 7
 };
+
+
 
 const Roster: React.FC = () => {
   const [players, setPlayers] = useLocalStorage<Player[]>('players', []);
@@ -135,9 +132,19 @@ const Roster: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleProcessComplete = (newPlayers: Omit<Player, 'id'>[]) => {
+    const playersWithIds = newPlayers.map(player => ({
+      ...player,
+      id: Date.now() + Math.random()  // This creates a unique ID
+    }));
+    setPlayers(prevPlayers => [...prevPlayers, ...playersWithIds]);
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-center">Roster</h1>
+
+      <RosterImageUpload onProcessComplete={handleProcessComplete} />
 
       <Card>
         <CardHeader className="text-xl font-semibold">
@@ -148,7 +155,7 @@ const Roster: React.FC = () => {
             <Input
               value={newPlayer.name}
               onChange={(e) => setNewPlayer({ ...newPlayer, name: e.target.value })}
-              placeholder="Player Name"
+              placeholder="Name"
               className={errors.name ? 'border-red-500' : ''}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
@@ -181,7 +188,7 @@ const Roster: React.FC = () => {
             <Input
               value={newPlayer.rating}
               onChange={(e) => setNewPlayer({ ...newPlayer, rating: e.target.value })}
-              placeholder="Rating"
+              placeholder="Overall"
               className={errors.rating ? 'border-red-500' : ''}
             />
             {errors.rating && <p className="text-red-500 text-xs mt-1">{errors.rating}</p>}
