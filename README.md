@@ -1,4 +1,4 @@
-FEATURES:
+<ins>**FEATURES:**</ins>
 
 1. Customizable Coach and School Name.
 2. Application Data Reset - ***USE CAUTIOUSLY!*** - Resets all application data and wipes any previously entered data/information.
@@ -15,7 +15,7 @@ FEATURES:
 11. Trophy Case - Enterable Trophies for users to track National Championships, Bowl Games, Conference Championships and Rivalry Games.
 
 
-HOW TO USE: (s/o ALostTraveler24 on Reddit)
+<ins>**HOW TO USE:** _(s/o ALostTraveler24 on Reddit)_</ins>
 
 1. First you need to verify that you have [`node.js`](https://nodejs.org/en/download/package-manager/current) on your device. You can install it from the linked website, but if you want to check if you have it already, load up your device's terminal/console and type in `node -v`
 2. Once that's done, you want to clone the repository. For that you need git and then you can either use the command prompt `git clone <repo url>` or you can download Github Desktop which might be a bit easier if you are new to git and don't use it at all other than for this.
@@ -25,7 +25,7 @@ HOW TO USE: (s/o ALostTraveler24 on Reddit)
    I think that's everything, when you're done with the app, you should probably end the process in the terminal `ctrl+c` should do the trick and then everytime you want to use it again, just run the last step again and it should load up with the relevant data.
 
 
-ISSUES:
+<ins>**ISSUES:**</ins>
 
   Will not build into standalone app properly.  
   
