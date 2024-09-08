@@ -4,7 +4,8 @@ FEATURES:
 2. Application Data Reset - ***USE CAUTIOUSLY!*** - Resets all application data and wipes any previously entered data/information.
 3. Dark & Light Mode.
 4. Schedule - Win/Loss/Tie and Score Tracker. Will automatically update record and points for/against in year stats.
-5. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
+5. Top 25 - Allows for user input of the top 25 teams wee by week.  Will show movement of teams via green and red arrows. 
+6. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
    
    **NEW:** **UPLOAD SCREENSHOTS TO HAVE ROSTER AUTO ADDED** 
 7. Recruiting Class Tracker - Enter recruits' name, star rating, position, rating, and potential. Automatically tracked and stored year over year for easy viewability in the future.
@@ -32,6 +33,7 @@ ISSUES:
 
 
 ![image](https://github.com/user-attachments/assets/2da9b4f5-ccef-475d-a12d-2f3d17d8b1f9)
+![image](https://github.com/user-attachments/assets/af0cb492-8ba0-4ae6-9595-e65161bbec7b)
 ![image](https://github.com/user-attachments/assets/75c2eab3-6c4a-4176-ac03-9a545d090829)
 ![image](https://github.com/user-attachments/assets/c3fb7f18-ff13-4804-a637-435ea216161d)
 ![image](https://github.com/user-attachments/assets/47c57abb-094c-47da-bd38-4fb8d26bc608)
