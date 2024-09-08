@@ -47,6 +47,7 @@
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tabs": "^1.1.0",
     "babel": "^6.23.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -61,14 +62,18 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
+    "react-tabs": "^6.0.2",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tesseract.js": "^5.1.1",
+    "theme-ui": "^0.16.2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/tesseract.js": "^2.0.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "electron": "^31.3.1",
