@@ -4,7 +4,7 @@ FEATURES:
 2. Application Data Reset - ***USE CAUTIOUSLY!*** - Resets all application data and wipes any previously entered data/information.
 3. Dark & Light Mode.
 4. Schedule - Win/Loss/Tie and Score Tracker. Will automatically update record and points for/against in year stats.
-5. Top 25 - Allows for user input of the top 25 teams wee by week.  Will show movement of teams via green and red arrows. 
+5. Top 25 - Allows for user input of the Top 25 teams week by week.  Will show movement of teams via green and red arrows. 
 6. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
    
    **NEW:** **UPLOAD SCREENSHOTS TO HAVE ROSTER AUTO ADDED** 
