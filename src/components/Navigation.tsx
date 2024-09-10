@@ -16,7 +16,7 @@ const Navigation: React.FC = memo(() => {
     { name: 'Recruiting', path: '/recruiting' },
     { name: 'Transfers', path: '/transfers' },
     { name: 'Season Stats', path: '/records' },
-    { name: 'Player Stats', path: '/player-stats' },
+    //{ name: 'Player Stats', path: '/player-stats' },
     { name: 'Player Awards', path: '/awards' },
     { name: 'Trophy Case', path: '/trophy-case' }
   ];
