@@ -99,13 +99,6 @@ const CoachProfile: React.FC = memo(() => {
               </label>
               <div className="flex items-center space-x-2">
                 <School size={18} className="text-green-500" />
-                {/* <Input
-                  id="schoolName"
-                  value={schoolName}
-                  onChange={(e) => setSchoolName(e.target.value)}
-                  placeholder=" Name "
-                  className="flex-grow"
-                /> */}
                 <Select
                   value={schoolName}
                   onValueChange={(value) => setSchoolName(value)}
