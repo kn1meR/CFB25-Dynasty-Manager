@@ -1,3 +1,4 @@
+// src/components/Navigation.tsx
 "use client";
 
 import React, { memo } from 'react';
@@ -11,33 +12,67 @@ const Navigation: React.FC = memo(() => {
 
   const navItems = [
     { name: 'Team Home', path: '/' },
+    { name: 'Schedule', path: '/schedule' },
     { name: 'Top 25', path: '/top25' },
     { name: 'Roster', path: '/roster' },
     { name: 'Recruiting', path: '/recruiting' },
     { name: 'Transfers', path: '/transfers' },
-    { name: 'Season Stats', path: '/records' },
     { name: 'Player Stats', path: '/player-stats' },
+    { name: 'Season Stats', path: '/records' },
     { name: 'Player Awards', path: '/awards' },
     { name: 'Trophy Case', path: '/trophy-case' }
   ];
 
   return (
-    <nav className="flex justify-between items-center p-4">
-      <ul className="flex space-x-4">
-        {navItems.map((item) => (
-          <li key={item.name}>
+    <nav className="w-full bg-gray-800 text-white">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              {/* You can add a logo here if desired */}
+            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  className={`${
+                    pathname === item.path
+                      ? 'border-blue-500 text-white'
+                      : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-white'
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center">
+            <CoachProfile />
+            <div className="ml-4">
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mobile menu, show/hide based on menu state */}
+      <div className="sm:hidden">
+        <div className="pt-2 pb-3 space-y-1">
+          {navItems.map((item) => (
             <Link
+              key={item.name}
               href={item.path}
-              className={`${pathname === item.path ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'} hover:text-blue-800 dark:hover:text-blue-300 transition-colors`}
+              className={`${
+                pathname === item.path
+                  ? 'bg-blue-500 border-blue-500 text-white'
+                  : 'border-transparent text-gray-300 hover:bg-gray-700 hover:border-gray-300 hover:text-white'
+              } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
             >
               {item.name}
             </Link>
-          </li>
-        ))}
-      </ul>
-      <div className="flex items-center space-x-4">
-        <ThemeToggle />
-        <CoachProfile />
+          ))}
+        </div>
       </div>
     </nav>
   );

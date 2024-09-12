@@ -3,8 +3,9 @@
 export interface Game {
   id: number;
   week: number;
+  location: '@' | 'vs' | 'neutral' | ' ';
   opponent: string;
-  result: string;
+  result: 'Win' | 'Loss' | 'Tie' | 'Bye' | 'N/A';
   score: string;
 }
 
@@ -39,49 +40,52 @@ export const getSchedule = (year: number): Game[] => {
   if (typeof window !== 'undefined') {
     const storedSchedule = localStorage.getItem(`schedule_${year}`);
     if (storedSchedule) {
-      const parsedSchedule = JSON.parse(storedSchedule);
-      // Ensure we always return an array of 18 games, starting from week 0
-      return Array.from({ length: 18 }, (_, i) => {
-        const existingGame = parsedSchedule.find((game: Game) => game.week === i);
-        return existingGame || { id: i, week: i, opponent: '', result: 'N/A', score: '' };
-      });
+      return JSON.parse(storedSchedule);
     }
   }
-  return Array.from({ length: 18 }, (_, i) => ({ 
-    id: i, 
-    week: i, 
-    opponent: '', 
-    result: 'N/A', 
-    score: '' 
-  }));
+  return [];
 };
 
 export const setSchedule = (year: number, schedule: Game[]): void => {
   if (typeof window !== 'undefined') {
-    // Ensure we're always storing 18 games, starting from week 0
-    const fullSchedule = Array.from({ length: 18 }, (_, i) => {
-      const existingGame = schedule.find(game => game.week === i);
-      return existingGame || { id: i, week: i, opponent: '', result: 'N/A', score: '' };
-    });
-    localStorage.setItem(`schedule_${year}`, JSON.stringify(fullSchedule));
+    localStorage.setItem(`schedule_${year}`, JSON.stringify(schedule));
   }
+};
+
+export const calculateStats = (schedule: Game[]): YearStats => {
+  let wins = 0, losses = 0, pointsScored = 0, pointsAgainst = 0;
+  schedule.forEach(game => {
+    if (game.result === 'Win') wins++;
+    if (game.result === 'Loss') losses++;
+    if (game.score) {
+      const [teamScore, opponentScore] = game.score.split('-').map(Number);
+      if (!isNaN(teamScore) && !isNaN(opponentScore)) {
+        pointsScored += teamScore;
+        pointsAgainst += opponentScore;
+      }
+    }
+  });
+  
+  return {
+    wins,
+    losses,
+    conferenceWins: 0, // You might want to calculate these based on your conference games
+    conferenceLosses: 0,
+    pointsScored,
+    pointsAgainst,
+    playersDrafted: 0,
+    conferenceStanding: '',
+    bowlGame: '',
+    bowlResult: '',
+  };
 };
 
 export const getYearStats = (year: number): YearStats => {
   if (typeof window !== 'undefined') {
     const storedStats = localStorage.getItem(`yearStats_${year}`);
-    return storedStats ? JSON.parse(storedStats) : {
-      wins: 0,
-      losses: 0,
-      conferenceWins: 0,
-      conferenceLosses: 0,
-      pointsScored: 0,
-      pointsAgainst: 0,
-      playersDrafted: 0,
-      conferenceStanding: '',
-      bowlGame: '',
-      bowlResult: '',
-    };
+    if (storedStats) {
+      return JSON.parse(storedStats);
+    }
   }
   return {
     wins: 0,
@@ -103,18 +107,3 @@ export const setYearStats = (year: number, stats: YearStats): void => {
   }
 };
 
-export const calculateStats = (schedule: Game[]): Partial<YearStats> => {
-  let wins = 0, losses = 0, pointsScored = 0, pointsAgainst = 0;
-  schedule.forEach(game => {
-    if (game.result === 'Win') wins++;
-    if (game.result === 'Loss') losses++;
-    if (game.score) {
-      const [teamScore, opponentScore] = game.score.split('-').map(Number);
-      if (!isNaN(teamScore) && !isNaN(opponentScore)) {
-        pointsScored += teamScore;
-        pointsAgainst += opponentScore;
-      }
-    }
-  });
-  return { wins, losses, pointsScored, pointsAgainst };
-};
