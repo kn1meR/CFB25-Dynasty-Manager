@@ -139,6 +139,7 @@ const SchedulePage: React.FC = () => {
                         {fbsTeams.map(team => (
                           <SelectItem key={team} value={team}>{team}</SelectItem>
                         ))}
+                        <SelectItem key={'BYE'} value='BYE'>BYE</SelectItem>
                       </SelectContent>
                     </Select>
                   </td>
