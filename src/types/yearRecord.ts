@@ -2,16 +2,17 @@
 
 export interface YearRecord {
   year: number;
-  wins: number;
-  losses: number;
-  ties: number;
+  overallRecord: string;
+  conferenceRecord: string;
   confWins: number;
   confLosses: number;
   confTies: number;
   pointsFor: number;
   pointsAgainst: number;
   bowlGame: string;
-  bowlResult?: string;
+  bowlResult?: "W" | "L" | "N/A";
+  nationalChamp: string;
+  heismanWinner: string;
   bowlScore: { team: number; opponent: number };
   schedule: Game[];
   notes: string;
