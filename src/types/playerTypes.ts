@@ -1,3 +1,5 @@
+// This file should contain types relating to a player's information (recruiting, roster, transfer, etc.)
+
 export interface Player {
     id: number;
     name: string;

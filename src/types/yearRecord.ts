@@ -1,4 +1,5 @@
 // src/types/yearRecord.ts
+// This file should contain type definitions for types pertaining to year records (I.E stats, schedules, records)
 
 import { DraftedPlayer, Recruit, Transfer } from "./playerTypes";
 import { Award } from "./statTypes";
@@ -26,7 +27,7 @@ export interface YearStats {
   losses: number;
   conferenceWins: number;
   conferenceLosses: number;
-  pointsFor: number;
+  pointsScored: number;
   pointsAgainst: number;
   playersDrafted: number;
   conferenceStanding: string;

@@ -7,11 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Table } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { getCurrentYear, getSchedule, setSchedule, Game, setYearStats, calculateStats, getYearStats } from '@/utils/localStorage';
+import { getCurrentYear, getSchedule, setSchedule, setYearStats, calculateStats, getYearStats } from '@/utils/localStorage';
 import { validateScore } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import { fbsTeams } from '@/utils/fbsTeams';
 import { fcsTeams } from '@/utils/fcsTeams';
+import { Game } from '@/types/yearRecord';
 
 const results = ['Win', 'Loss', 'Tie', 'Bye', 'N/A'] as const;
 const locations = ['@', 'vs', 'neutral', ' '] as const;

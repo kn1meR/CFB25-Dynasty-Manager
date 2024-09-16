@@ -9,61 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table } from '@/components/ui/table';
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface Game {
-  week: number;
-  opponent: string;
-  result: string;
-  score: string;
-}
-
-interface Recruit {
-  recruitedYear: number;
-  name: string;
-  stars: string;
-  position: string;
-  rating: string;
-  potential: string;
-}
-
-interface Transfer {
-  transferYear: number;
-  playerName: string;
-  position: string;
-  stars: string;
-  transferDirection: 'From' | 'To';
-  school: string;
-}
-
-interface YearRecord {
-  year: number;
-  overallRecord: string;
-  conferenceRecord: string;
-  bowlGame: string;
-  bowlResult: string;
-  pointsFor: string;
-  pointsAgainst: string;
-  natChamp: string;
-  heisman: string;
-  schedule?: Game[];
-  recruits?: Recruit[];
-  transfers?: Transfer[];
-  playerAwards: Award[];
-  recruitingClassPlacement: string;
-  playersDrafted: DraftedPlayer[];
-}
-
-interface Award {
-  id: number;
-  playerName: string;
-  awardName: string;
-  year: number;
-}
-
-interface DraftedPlayer {
-  playerName: string;
-  round: string;
-}
+import { DraftedPlayer, Recruit, Transfer } from '@/types/playerTypes';
+import { Award } from '@/types/statTypes';
+import { YearRecord, Game, YearStats } from '@/types/yearRecord';
 
 interface YearRecordModalProps {
   year: number;

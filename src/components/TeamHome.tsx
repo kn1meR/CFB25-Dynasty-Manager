@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { getCurrentYear, setCurrentYear, getSchedule, setSchedule, getYearStats, setYearStats, calculateStats, Game, YearStats } from '@/utils/localStorage';
+import { getCurrentYear, setCurrentYear, getSchedule, setSchedule, getYearStats, setYearStats, calculateStats, generateYearRecord, setYearRecord} from '@/utils/localStorage';
 import { validateYear } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import { Game, YearStats } from '@/types/yearRecord';
 
 const TeamHome: React.FC = () => {
   const router = useRouter();
@@ -50,30 +51,35 @@ const TeamHome: React.FC = () => {
   }, []);
 
   const endYear = () => {
-    if (!validateYear(currentYear + 1)) {
-      toast.error('Invalid next year. Please check the year and try again.');
+    if(!validateYear(currentYear + 1)) {
+      toast.error('Invalid next year. Please check year and try again')
       return;
     }
 
     try {
-      // Save current year's schedule and stats
+      // Save currentYear's schedules and stats
       setSchedule(currentYear, currentSchedule);
       const calculatedStats = calculateStats(currentSchedule);
       setYearStats(currentYear, calculatedStats);
-    
+
+      // Generate Year Record
+      let yearRecord = generateYearRecord(currentYear, yearStats, currentSchedule);
+
+      // Store Year Record
+      setYearRecord(currentYear, yearRecord);
+
       // Move to next year
       const newYear = currentYear + 1;
       setYear(newYear);
       setCurrentYear(newYear);
-      
-      // Reset schedule for new year
-      const newSchedule: Game[] = Array.from({ length: 19 }, (_, i) => ({ 
-        id: i, 
+
+      const newSchedule: Game[] = Array.from({ length:19 }, (_, i) => ({
+        id: i,
         week: i,
-        location: 'neutral', 
-        opponent: 'unselected', 
-        result: 'N/A', 
-        score: '' 
+        location: 'neutral',
+        opponent: 'unselected',
+        result: 'N/A',
+        score: ''
       }));
       setCurrentSchedule(newSchedule);
       setSchedule(newYear, newSchedule);
@@ -96,7 +102,7 @@ const TeamHome: React.FC = () => {
       console.error('Error ending year:', error);
       toast.error('Failed to end the year. Please try again.');
     }
-  };
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
