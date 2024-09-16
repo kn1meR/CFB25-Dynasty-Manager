@@ -15,6 +15,28 @@ interface Award {
   year: number;
 }
 
+const predefinedAwards = [
+  "Heisman Trophy",
+  "Player of the Year",
+  "Head Coach of the Year",
+  "Best Quarterback",
+  "Best Defensive Player",
+  "Best Defensive Back",
+  "Best Running Back",
+  "Best Receiver",
+  "Lombardi Award",
+  "Unitas Golden Arm Award", 
+  "Best Defensive End",
+  "Best Interorior Lineman",
+  "Best Tight End",
+  "Broyles Award",
+  "Best Linebacker",
+  "Best Center",
+  "Lou Groza Award",
+  "Best Punter",
+  "Best Returner",
+];
+
 const AwardTracker: React.FC = () => {
   const [currentYear, setCurrentYear] = useState<number>(() => {
     if (typeof window !== 'undefined') {
@@ -102,11 +124,19 @@ const AwardTracker: React.FC = () => {
               onChange={(e) => setNewAward({ ...newAward, playerName: e.target.value })}
               placeholder="Player Name"
             />
-            <Input
+            <Select
               value={newAward.awardName}
-              onChange={(e) => setNewAward({ ...newAward, awardName: e.target.value })}
-              placeholder="Award Name"
-            />
+              onValueChange={(value) => setNewAward({ ...newAward, awardName: value })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Award" />
+              </SelectTrigger>
+              <SelectContent>
+                {predefinedAwards.map(award => (
+                  <SelectItem key={award} value={award}>{award}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {editingId ? (
               <div className="flex space-x-2">
                 <Button onClick={saveEdit}>Save</Button>
