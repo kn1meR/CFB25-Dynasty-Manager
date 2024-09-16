@@ -27,7 +27,7 @@ const predefinedAwards = [
   "Lombardi Award",
   "Unitas Golden Arm Award", 
   "Best Defensive End",
-  "Best Interorior Lineman",
+  "Best Interior Lineman",
   "Best Tight End",
   "Broyles Award",
   "Best Linebacker",

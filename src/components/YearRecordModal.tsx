@@ -78,13 +78,13 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
     const storedRecords = localStorage.getItem('yearRecords');
     let records: YearRecord[] = storedRecords ? JSON.parse(storedRecords) : [];
     const existingIndex = records.findIndex(r => r.year === year);
-  
+
     if (existingIndex !== -1) {
       records[existingIndex] = record;
     } else {
       records.push(record);
     }
-  
+
     localStorage.setItem('yearRecords', JSON.stringify(records));
     onClose();
   };
@@ -206,14 +206,14 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
                 </div>
               </div>
               <div className="grid grid-cols-3 items-center gap-4">
-                  <label htmlFor="classRanking" className="text-right">Recruiting Class Rank:</label>
-                  <Input
-                    id="classRanking"
-                    value={record.recruitingClassPlacement}
-                    onChange={(e) => setRecord({ ...record, recruitingClassPlacement: e.target.value })}
-                    className="col-span-2"
-                  />
-                </div>
+                <label htmlFor="classRanking" className="text-right">Recruiting Class Rank:</label>
+                <Input
+                  id="classRanking"
+                  value={record.recruitingClassPlacement}
+                  onChange={(e) => setRecord({ ...record, recruitingClassPlacement: e.target.value })}
+                  className="col-span-2"
+                />
+              </div>
             </ScrollArea>
           </div>
           {record.schedule && (
@@ -273,6 +273,23 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
             <h3 className="text-xl text-center font-semibold mb-2">{year} Recruits, Transfers, and Awards</h3>
             <ScrollArea className="h-[calc(100%-3rem)] w-full rounded-md border p-4">
               <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-center">Player Awards</h4>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Award Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {record.playerAwards?.map((award, index) => (
+                      <tr key={index}>
+                        <td style={{ textAlign: 'center' }}>{award.playerName}</td>
+                        <td style={{ textAlign: 'center' }}>{award.awardName}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
                 <h4 className="text-lg font-semibold text-center">Recruits</h4>
                 <Table>
                   <thead>
