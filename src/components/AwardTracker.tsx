@@ -7,13 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Table } from '@/components/ui/table';
 import { capitalizeName } from '@/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-interface Award {
-  id: number;
-  playerName: string;
-  awardName: string;
-  year: number;
-}
+import { Award } from '@/types/statTypes';
 
 const predefinedAwards = [
   "Heisman Trophy",

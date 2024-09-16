@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { DraftedPlayer, Recruit, Transfer } from '@/types/playerTypes';
 import { Award } from '@/types/statTypes';
 import { YearRecord, Game, YearStats } from '@/types/yearRecord';
+import { getRecruits, getTransfers, getYearAwards, getYearRecord } from '@/utils/localStorage';
 
 interface YearRecordModalProps {
   year: number;
@@ -38,40 +39,32 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
   });
 
   useEffect(() => {
-    const storedRecords = localStorage.getItem('yearRecords');
-    const storedRecruits = localStorage.getItem(`allRecruits`);
-    const storedTransfers = localStorage.getItem(`allTransfers`);
-    const storedAwards = localStorage.getItem('allAwards');
+    let existingRecord = getYearRecord(year);
 
-    if (storedRecords) {
-      const records: YearRecord[] = JSON.parse(storedRecords);
-      const existingRecord = records.find(r => r.year === year);
-      if (existingRecord) {
-        setRecord({
-          ...existingRecord,
-          schedule: existingRecord.schedule || record.schedule,
-          playersDrafted: existingRecord.playersDrafted || [],
-        });
+    if(existingRecord.playerAwards.length == 0) {
+      const yearAwards = getYearAwards(year);
+      existingRecord = {
+        ...existingRecord, 
+        playerAwards: yearAwards
+      }
+    }
+    if(existingRecord.transfers?.length == 0) {
+      const yearTransfers = getTransfers(year);
+      existingRecord = {
+        ...existingRecord, 
+        transfers: yearTransfers
+      }
+    }
+    if(existingRecord.recruits?.length == 0) {
+      const yearRecruits = getRecruits(year);
+      existingRecord = {
+        ...existingRecord, 
+        recruits: yearRecruits
       }
     }
 
-    if (storedRecruits) {
-      const allRecruits: Recruit[] = JSON.parse(storedRecruits);
-      const yearRecruits = allRecruits.filter(recruit => recruit.recruitedYear === year);
-      setRecord(prev => ({ ...prev, recruits: yearRecruits }));
-    }
+    setRecord(existingRecord);
 
-    if (storedTransfers) {
-      const allTransfers: Transfer[] = JSON.parse(storedTransfers);
-      const yearTransfers = allTransfers.filter(transfer => transfer.transferYear === year);
-      setRecord(prev => ({ ...prev, transfers: yearTransfers }));
-    }
-
-    if (storedAwards) {
-      const allAwards: Award[] = JSON.parse(storedAwards);
-      const yearAwards = allAwards.filter(award => award.year === year);
-      setRecord(prev => ({ ...prev, playerAwards: yearAwards }));
-    }
   }, [year]);
 
   const handleSave = () => {

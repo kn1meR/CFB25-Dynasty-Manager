@@ -9,6 +9,7 @@ export interface Player {
 }
 
 export interface Recruit {
+    id: number,
     recruitedYear: number;
     name: string;
     stars: string;
@@ -18,6 +19,7 @@ export interface Recruit {
 }
 
 export interface Transfer {
+    id: number;
     transferYear: number;
     playerName: string;
     position: string;

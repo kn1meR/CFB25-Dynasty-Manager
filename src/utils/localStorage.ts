@@ -126,7 +126,7 @@ export const getYearRecord = (year: number): YearRecord => {
     pointsAgainst: '',
     natChamp: '',
     heisman: '',
-    schedule: [],
+    schedule: Array(19).fill({ week: 0, opponent: '', result: '', score: '' }).map((game, index) => ({ ...game, week: index })),
     recruits: [],
     transfers: [],
     playerAwards: [],
