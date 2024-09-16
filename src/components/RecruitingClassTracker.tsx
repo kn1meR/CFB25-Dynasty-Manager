@@ -8,16 +8,7 @@ import { Table } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
-
-interface Recruit {
-  id: number;
-  name: string;
-  stars: string;
-  position: string;
-  rating: string;
-  potential: string;
-  recruitedYear: number;
-}
+import { Recruit } from '@/types/playerTypes';
 
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
 const potentials = ['Elite', 'Star', 'Impact', 'Normal'];

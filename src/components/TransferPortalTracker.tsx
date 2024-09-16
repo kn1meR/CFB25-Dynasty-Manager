@@ -9,16 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
 import { fbsTeams } from '@/utils/fbsTeams';
+import { Transfer } from '@/types/playerTypes';
+import { getTransfers } from '@/utils/localStorage';
 
-interface Transfer {
-  id: number;
-  playerName: string;
-  position: string;
-  stars: string;
-  transferDirection: 'From' | 'To';
-  school: string;
-  transferYear: number;
-}
 
 const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
 const starOptions = ['1', '2', '3', '4', '5'];
@@ -36,7 +29,7 @@ const TransferPortalTracker: React.FC = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
 
-  const transfersForSelectedYear = allTransfers.filter(transfer => transfer.transferYear === selectedYear);
+  const transfersForSelectedYear = getTransfers(selectedYear);
 
   const addTransfer = () => {
     const transferToAdd = {

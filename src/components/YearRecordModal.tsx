@@ -9,67 +9,15 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table } from '@/components/ui/table';
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface Game {
-  week: number;
-  opponent: string;
-  result: string;
-  score: string;
-}
-
-interface Recruit {
-  recruitedYear: number;
-  name: string;
-  stars: string;
-  position: string;
-  rating: string;
-  potential: string;
-}
-
-interface Transfer {
-  transferYear: number;
-  playerName: string;
-  position: string;
-  stars: string;
-  transferDirection: 'From' | 'To';
-  school: string;
-}
-
-interface YearRecord {
-  year: number;
-  overallRecord: string;
-  conferenceRecord: string;
-  bowlGame: string;
-  bowlResult: string;
-  pointsFor: string;
-  pointsAgainst: string;
-  natChamp: string;
-  heisman: string;
-  schedule?: Game[];
-  recruits?: Recruit[];
-  transfers?: Transfer[];
-  playerAwards: Award[];
-  recruitingClassPlacement: string;
-  playersDrafted: DraftedPlayer[];
-}
-
-interface Award {
-  id: number;
-  playerName: string;
-  awardName: string;
-  year: number;
-}
-
-interface DraftedPlayer {
-  playerName: string;
-  round: string;
-}
+import { DraftedPlayer, Recruit, Transfer } from '@/types/playerTypes';
+import { Award } from '@/types/statTypes';
+import { YearRecord, Game, YearStats } from '@/types/yearRecord';
+import { getRecruits, getTransfers, getYearAwards, getYearRecord } from '@/utils/localStorage';
 
 interface YearRecordModalProps {
   year: number;
   onClose: () => void;
 }
-
 const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
   const [record, setRecord] = useState<YearRecord>({
     year,
@@ -90,40 +38,32 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
   });
 
   useEffect(() => {
-    const storedRecords = localStorage.getItem('yearRecords');
-    const storedRecruits = localStorage.getItem(`allRecruits`);
-    const storedTransfers = localStorage.getItem(`allTransfers`);
-    const storedAwards = localStorage.getItem('allAwards');
+    let existingRecord = getYearRecord(year);
 
-    if (storedRecords) {
-      const records: YearRecord[] = JSON.parse(storedRecords);
-      const existingRecord = records.find(r => r.year === year);
-      if (existingRecord) {
-        setRecord({
-          ...existingRecord,
-          schedule: existingRecord.schedule || record.schedule,
-          playersDrafted: existingRecord.playersDrafted || [],
-        });
+    if(existingRecord.playerAwards.length == 0) {
+      const yearAwards = getYearAwards(year);
+      existingRecord = {
+        ...existingRecord, 
+        playerAwards: yearAwards
+      }
+    }
+    if(existingRecord.transfers?.length == 0) {
+      const yearTransfers = getTransfers(year);
+      existingRecord = {
+        ...existingRecord, 
+        transfers: yearTransfers
+      }
+    }
+    if(existingRecord.recruits?.length == 0) {
+      const yearRecruits = getRecruits(year);
+      existingRecord = {
+        ...existingRecord, 
+        recruits: yearRecruits
       }
     }
 
-    if (storedRecruits) {
-      const allRecruits: Recruit[] = JSON.parse(storedRecruits);
-      const yearRecruits = allRecruits.filter(recruit => recruit.recruitedYear === year);
-      setRecord(prev => ({ ...prev, recruits: yearRecruits }));
-    }
+    setRecord(existingRecord);
 
-    if (storedTransfers) {
-      const allTransfers: Transfer[] = JSON.parse(storedTransfers);
-      const yearTransfers = allTransfers.filter(transfer => transfer.transferYear === year);
-      setRecord(prev => ({ ...prev, transfers: yearTransfers }));
-    }
-
-    if (storedAwards) {
-      const allAwards: Award[] = JSON.parse(storedAwards);
-      const yearAwards = allAwards.filter(award => award.year === year);
-      setRecord(prev => ({ ...prev, playerAwards: yearAwards }));
-    }
   }, [year]);
 
   const handleSave = () => {
@@ -325,6 +265,23 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
             <h3 className="text-xl text-center font-semibold mb-2">{year} Recruits, Transfers, and Awards</h3>
             <ScrollArea className="h-[calc(100%-3rem)] w-full rounded-md border p-4">
               <div className="space-y-4">
+                <h4 className="text-lg font-semibold text-center">Player Awards</h4>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Award Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {record.playerAwards?.map((award, index) => (
+                      <tr key={index}>
+                        <td style={{ textAlign: 'center' }}>{award.playerName}</td>
+                        <td style={{ textAlign: 'center' }}>{award.awardName}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
                 <h4 className="text-lg font-semibold text-center">Recruits</h4>
                 <Table>
                   <thead>
@@ -348,7 +305,6 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
                     ))}
                   </tbody>
                 </Table>
-
                 <h4 className="text-lg font-semibold mt-4 text-center">Transfers</h4>
                 <Table>
                   <thead>
@@ -372,7 +328,6 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
                     ))}
                   </tbody>
                 </Table>
-
                 <h4 className="text-lg font-semibold mt-4 text-center">Players Drafted</h4>
                 <Table>
                   <thead>
@@ -418,5 +373,4 @@ const YearRecordModal: React.FC<YearRecordModalProps> = ({ year, onClose }) => {
     </Dialog>
   );
 };
-
 export default YearRecordModal;

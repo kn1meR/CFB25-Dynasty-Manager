@@ -7,13 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Table } from '@/components/ui/table';
 import { capitalizeName } from '@/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Award } from '@/types/statTypes';
 
-interface Award {
-  id: number;
-  playerName: string;
-  awardName: string;
-  year: number;
-}
 
 const predefinedAwards = [
   "Heisman Trophy",
@@ -27,7 +22,7 @@ const predefinedAwards = [
   "Lombardi Award",
   "Unitas Golden Arm Award", 
   "Best Defensive End",
-  "Best Interorior Lineman",
+  "Best Interior Lineman",
   "Best Tight End",
   "Broyles Award",
   "Best Linebacker",
