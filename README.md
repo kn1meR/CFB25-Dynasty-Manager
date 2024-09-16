@@ -6,14 +6,14 @@
 4. Team Dashboard - See relevant team data at a quick glance.
 5. Schedule - Win/Loss/Tie and Score Tracker. Will automatically update record and points for/against in year stats.
 6. Top 25 - Allows for user input of the Top 25 teams week by week.  Will show movement of teams via green and red arrows. 
-7. Roster - Allows for roster input with name, position, year, overall and is sortable by all fields.
+7. Roster - Allows for roster input with name, position, year, overall, dev. trait and notes. sortable by almost all fields.
    
    **NEW:** **UPLOAD SCREENSHOTS TO HAVE ROSTER AUTO ADDED** 
 8. Recruiting Class Tracker - Enter recruits' name, star rating, position, rating, and potential. Automatically tracked and stored year over year for easy viewability in the future.
 9. Transfer Class Tracker - Enter transfers' name, star rating, position, transfer direction(To/From), and potential. Automatically tracked and stored year over year for easy viewability in the future.
 10. Player Stats - Track stats for players by year.  See Game, Season, or Overall records for Offense, Defense, or Special Teams.  
 11. Season Stats - Buttons for all 30 years. Stats tracked are Record, Conference Record, Points For, Points Against, Bowl Game & Result, National Champion, Heisman Record, and Schedule w/ Opponent and Result with Score.
-12. Player Awards - Enterable player awards tracked on a year-to-year basis for easy viewabilty in the future.
+12. Player Awards - Selectable player awards tracked on a year-to-year basis for easy viewabilty in the future.
 13. Trophy Case - Enterable Trophies for users to track National Championships, Bowl Games, Conference Championships and Rivalry Games.
 
 
