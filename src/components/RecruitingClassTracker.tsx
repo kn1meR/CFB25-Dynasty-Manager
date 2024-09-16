@@ -139,7 +139,7 @@ const RecruitingClassTracker: React.FC = () => {
               onValueChange={(value) => setNewRecruit({ ...newRecruit, potential: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Potential" />
+                <SelectValue placeholder="Dev. Trait" />
               </SelectTrigger>
               <SelectContent>
                 {potentials.map(pot => (

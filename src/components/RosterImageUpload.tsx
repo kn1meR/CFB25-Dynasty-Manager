@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { recognizeText, parsePlayerData } from '@/utils/ocr';
-import { Player } from '@/types';  // Make sure to import the Player type
+import { Player } from '@/types';
 
 interface RosterImageUploadProps {
-  onProcessComplete: (players: Omit<Player, 'id'>[]) => void;
+  onProcessComplete: (players: Omit<Player, 'id' | 'devTrait' | 'notes'>[]) => void;
 }
 
 const RosterImageUpload: React.FC<RosterImageUploadProps> = ({ onProcessComplete }) => {
@@ -32,7 +32,7 @@ const RosterImageUpload: React.FC<RosterImageUploadProps> = ({ onProcessComplete
   return (
     <div>
       <input type="file" accept="image/*" onChange={handleImageChange} />
-      <Button onClick={handleUpload} disabled={!image} >
+      <Button onClick={handleUpload} disabled={!image}>
         Upload and Process
       </Button>
     </div>

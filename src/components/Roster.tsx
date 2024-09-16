@@ -11,29 +11,39 @@ import { capitalizeName } from '@/utils';
 import { validateName, validateRating, validatePosition } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import RosterImageUpload from './RosterImageUpload';
-import { Player } from '@/types'; 
 
+interface Player {
+  id: number;
+  name: string;
+  position: string;
+  year: string;
+  rating: string;
+  devTrait: 'Normal' | 'Impact' | 'Star' | 'Elite';
+  notes: string;
+}
 
-const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
+const positions = ['QB', 'RB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT', 'LE', 'RE', 'DT', 'LOLB', 'MLB', 'ROLB', 'CB', 'FS', 'SS', 'K', 'P'];
 const years = ['FR', 'FR (RS)', 'SO', 'SO (RS)', 'JR', 'JR (RS)', 'SR', 'SR (RS)'];
+const devTraits = ['Normal', 'Impact', 'Star', 'Elite'] as const;
 
-type SortField = 'name' | 'position' | 'year' | 'rating';
+type SortField = 'name' | 'position' | 'year' | 'rating' | 'devTrait';
 
 const yearOrder: { [key: string]: number } = {
   'FR': 0, 'FR (RS)': 1, 'SO': 2, 'SO (RS)': 3, 'JR': 4, 'JR (RS)': 5, 'SR': 6, 'SR (RS)': 7
 };
 
-
+const devTraitOrder: { [key: string]: number } = {
+  'Normal': 0, 'Impact': 1, 'Star': 2, 'Elite': 3
+};
 
 const Roster: React.FC = () => {
   const [players, setPlayers] = useLocalStorage<Player[]>('players', []);
-  const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id'>>({ name: '', position: '', year: '', rating: '' });
+  const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id'>>({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: 'asc' | 'desc' }>({ field: 'rating', direction: 'desc' });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    // Automatically sort players by rating when the component mounts or players change
     setSortConfig({ field: 'rating', direction: 'desc' });
   }, [players]);
 
@@ -45,6 +55,9 @@ const Roster: React.FC = () => {
       return sortConfig.direction === 'asc'
         ? parseInt(a.rating) - parseInt(b.rating)
         : parseInt(b.rating) - parseInt(a.rating);
+    } else if (sortConfig.field === 'devTrait') {
+      const traitDiff = devTraitOrder[a.devTrait] - devTraitOrder[b.devTrait];
+      return sortConfig.direction === 'asc' ? traitDiff : -traitDiff;
     } else {
       if (a[sortConfig.field] < b[sortConfig.field]) return sortConfig.direction === 'asc' ? -1 : 1;
       if (a[sortConfig.field] > b[sortConfig.field]) return sortConfig.direction === 'asc' ? 1 : -1;
@@ -63,7 +76,7 @@ const Roster: React.FC = () => {
     if (validatePlayer(newPlayer)) {
       try {
         setPlayers([...players, { ...newPlayer, id: Date.now(), name: capitalizeName(newPlayer.name) }]);
-        setNewPlayer({ name: '', position: '', year: '', rating: '' });
+        setNewPlayer({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
         toast.success('Player added successfully!');
       } catch (error) {
         console.error('Error adding player:', error);
@@ -103,12 +116,12 @@ const Roster: React.FC = () => {
         : player
     ));
     setEditingId(null);
-    setNewPlayer({ name: '', position: '', year: '', rating: '' });
+    setNewPlayer({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setNewPlayer({ name: '', position: '', year: '', rating: '' });
+    setNewPlayer({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   };
 
   const removePlayer = (id: number) => {
@@ -132,10 +145,12 @@ const Roster: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleProcessComplete = (newPlayers: Omit<Player, 'id'>[]) => {
+  const handleProcessComplete = (newPlayers: Omit<Player, 'id' | 'devTrait' | 'notes'>[]) => {
     const playersWithIds = newPlayers.map(player => ({
       ...player,
-      id: Date.now() + Math.random()  // This creates a unique ID
+      id: Date.now() + Math.random(),
+      devTrait: 'Normal' as const,
+      notes: ''
     }));
     setPlayers(prevPlayers => [...prevPlayers, ...playersWithIds]);
   };
@@ -151,14 +166,13 @@ const Roster: React.FC = () => {
           {editingId ? 'Edit Player' : 'Add New Player'}
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4">
             <Input
               value={newPlayer.name}
               onChange={(e) => setNewPlayer({ ...newPlayer, name: e.target.value })}
               placeholder="Name"
               className={errors.name ? 'border-red-500' : ''}
             />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
             <Select
               value={newPlayer.position}
               onValueChange={(value) => setNewPlayer({ ...newPlayer, position: value })}
@@ -191,7 +205,24 @@ const Roster: React.FC = () => {
               placeholder="Overall"
               className={errors.rating ? 'border-red-500' : ''}
             />
-            {errors.rating && <p className="text-red-500 text-xs mt-1">{errors.rating}</p>}
+            <Select
+              value={newPlayer.devTrait}
+              onValueChange={(value) => setNewPlayer({ ...newPlayer, devTrait: value as Player['devTrait'] })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Dev Trait" />
+              </SelectTrigger>
+              <SelectContent>
+                {devTraits.map(trait => (
+                  <SelectItem key={trait} value={trait}>{trait}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              value={newPlayer.notes}
+              onChange={(e) => setNewPlayer({ ...newPlayer, notes: e.target.value })}
+              placeholder="Notes"
+            />
             {editingId ? (
               <div className="flex space-x-2">
                 <Button onClick={saveEdit}>Save</Button>
@@ -222,6 +253,10 @@ const Roster: React.FC = () => {
                 <th className="text-center cursor-pointer" onClick={() => requestSort('rating')}>
                   Rating {sortConfig.field === 'rating' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
                 </th>
+                <th className="text-center cursor-pointer" onClick={() => requestSort('devTrait')}>
+                  Dev. Trait {sortConfig.field === 'devTrait' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="text-center">Notes</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -232,6 +267,8 @@ const Roster: React.FC = () => {
                   <td className="text-center">{player.position}</td>
                   <td className="text-center">{player.year}</td>
                   <td className="text-center">{player.rating}</td>
+                  <td className="text-center">{player.devTrait || 'Normal'}</td>
+                  <td className="text-center">{player.notes}</td>
                   <td className="text-center">
                     <div className="flex justify-center space-x-2">
                       <Button onClick={() => startEditing(player)} size="sm">Edit</Button>
