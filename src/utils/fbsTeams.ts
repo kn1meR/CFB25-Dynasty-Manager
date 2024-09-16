@@ -135,5 +135,4 @@ export const fbsTeams = [
     "Western Michigan",
     "Wisconsin",
     "Wyoming",
-    "BYE"
   ];

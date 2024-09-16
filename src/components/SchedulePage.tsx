@@ -11,6 +11,7 @@ import { getCurrentYear, getSchedule, setSchedule, Game, setYearStats, calculate
 import { validateScore } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import { fbsTeams } from '@/utils/fbsTeams';
+import { fcsTeams } from '@/utils/fcsTeams';
 
 const results = ['Win', 'Loss', 'Tie', 'Bye', 'N/A'] as const;
 const locations = ['@', 'vs', 'neutral', ' '] as const;
@@ -136,7 +137,11 @@ const SchedulePage: React.FC = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="unselected">-- Select Team --</SelectItem>
+                        <SelectItem key={'BYE'} value='BYE'>BYE</SelectItem>
                         {fbsTeams.map(team => (
+                          <SelectItem key={team} value={team}>{team}</SelectItem>
+                        ))}
+                        {fcsTeams.map(team => (
                           <SelectItem key={team} value={team}>{team}</SelectItem>
                         ))}
                       </SelectContent>
