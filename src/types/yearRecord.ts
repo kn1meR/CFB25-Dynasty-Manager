@@ -1,29 +1,48 @@
 // src/types/yearRecord.ts
 
+import { DraftedPlayer, Recruit, Transfer } from "./playerTypes";
+import { Award } from "./statTypes";
+
 export interface YearRecord {
   year: number;
   overallRecord: string;
   conferenceRecord: string;
-  confWins: number;
-  confLosses: number;
-  confTies: number;
+  bowlGame: string;
+  bowlResult: string;
+  pointsFor: string;
+  pointsAgainst: string;
+  natChamp: string;
+  heisman: string;
+  schedule?: Game[];
+  recruits?: Recruit[];
+  transfers?: Transfer[];
+  playerAwards: Award[];
+  recruitingClassPlacement: string;
+  playersDrafted: DraftedPlayer[];
+}
+
+export interface YearStats {
+  wins: number;
+  losses: number;
+  conferenceWins: number;
+  conferenceLosses: number;
   pointsFor: number;
   pointsAgainst: number;
+  playersDrafted: number;
+  conferenceStanding: string;
   bowlGame: string;
-  bowlResult?: "W" | "L" | "N/A";
-  nationalChamp: string;
-  heismanWinner: string;
-  bowlScore: { team: number; opponent: number };
-  schedule: Game[];
-  notes: string;
+  bowlResult: 'Win' | 'Loss' | 'CFP' | 'DNP' | '';
 }
 
 export interface Game {
+  id: number;
+  week: number;
+  location: '@' | 'vs' | 'neutral' | ' ';
   opponent: string;
-  result: string;
-  score: { team: number; opponent: number };
+  result: 'Win' | 'Loss' | 'Tie' | 'Bye' | 'N/A';
+  score: string;
 }
-  
-  export type AllRecords = {
-    [year: number]: YearRecord;
-  };
+
+export type AllRecords = {
+  [year: number]: YearRecord;
+};
