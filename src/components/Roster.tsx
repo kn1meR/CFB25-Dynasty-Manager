@@ -27,7 +27,7 @@ interface Player {
 const years = ['FR', 'FR (RS)', 'SO', 'SO (RS)', 'JR', 'JR (RS)', 'SR', 'SR (RS)'];
 const devTraits = ['Normal', 'Impact', 'Star', 'Elite'] as const;
 
-type SortField = 'jerseyNumber' | 'name' | 'position' | 'year' | 'rating' | 'devTrait';
+type SortField = 'jerseyNumber' | 'name' | 'position' | 'year' | 'rating' | 'dev. trait';
 
 const yearOrder: { [key: string]: number } = {
   'FR': 0, 'FR (RS)': 1, 'SO': 2, 'SO (RS)': 3, 'JR': 4, 'JR (RS)': 5, 'SR': 6, 'SR (RS)': 7
@@ -58,35 +58,33 @@ const Roster: React.FC = () => {
     }
     if (sortConfig.field === 'year') {
       const yearDiff = yearOrder[a.year] - yearOrder[b.year];
+      if(yearDiff === 0) {
+        const ratingDiff = parseInt(a.rating) - parseInt(b.rating);
+        return sortConfig.direction === 'asc' ? ratingDiff : -ratingDiff
+      }
       return sortConfig.direction === 'asc' ? yearDiff : -yearDiff;
     } else if (sortConfig.field === 'rating') {
       return sortConfig.direction === 'asc'
         ? parseInt(a.rating) - parseInt(b.rating)
         : parseInt(b.rating) - parseInt(a.rating);
-    } else if (sortConfig.field === 'devTrait') {
+    } else if (sortConfig.field === 'dev. trait') {
       const traitDiff = devTraitOrder[a.devTrait] - devTraitOrder[b.devTrait];
-      return sortConfig.direction === 'asc' ? traitDiff : -traitDiff;
-    } else if (sortConfig.field === 'position') {
-      let finalSort;
-      const positionDiff = positions.indexOf(a.position) - positions.indexOf(b.position);
-      if(positionDiff === 0) {
-        let ratingDiff = parseInt(a.rating) - parseInt(b.rating)
-        return -ratingDiff
-      } else {
-        finalSort = positionDiff
+      if (traitDiff === 0) {
+        const ratingDiff = parseInt(a.rating) - parseInt(b.rating);
+        return sortConfig.direction === 'asc' ? ratingDiff : -ratingDiff
       }
-      return sortConfig.direction === 'asc' ? finalSort : -finalSort; 
+      return sortConfig.direction === 'asc' ? traitDiff : -traitDiff;
     } else {
       if (a[sortConfig.field] < b[sortConfig.field]) return sortConfig.direction === 'asc' ? -1 : 1;
       if (a[sortConfig.field] > b[sortConfig.field]) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
+      return sortConfig.direction === 'asc' ? parseInt(a.rating) - parseInt(b.rating) : parseInt(b.rating) - parseInt(a.rating);
     }
   });
 
   const requestSort = (field: SortField) => {
     setSortConfig(prevConfig => ({
       field,
-      direction: prevConfig.field === field && prevConfig.direction === 'asc' ? 'desc' : 'asc',
+      direction: prevConfig.field === field && prevConfig.direction === 'desc' ? 'asc' : 'desc',
     }));
   };
 
