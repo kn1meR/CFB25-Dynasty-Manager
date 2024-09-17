@@ -58,6 +58,16 @@ const Roster: React.FC = () => {
     } else if (sortConfig.field === 'devTrait') {
       const traitDiff = devTraitOrder[a.devTrait] - devTraitOrder[b.devTrait];
       return sortConfig.direction === 'asc' ? traitDiff : -traitDiff;
+    } else if (sortConfig.field === 'position') {
+      let finalSort;
+      const positionDiff = positions.indexOf(a.position) - positions.indexOf(b.position);
+      if(positionDiff === 0) {
+        let ratingDiff = parseInt(a.rating) - parseInt(b.rating)
+        return -ratingDiff
+      } else {
+        finalSort = positionDiff
+      }
+      return sortConfig.direction === 'asc' ? finalSort : -finalSort; 
     } else {
       if (a[sortConfig.field] < b[sortConfig.field]) return sortConfig.direction === 'asc' ? -1 : 1;
       if (a[sortConfig.field] > b[sortConfig.field]) return sortConfig.direction === 'asc' ? 1 : -1;
