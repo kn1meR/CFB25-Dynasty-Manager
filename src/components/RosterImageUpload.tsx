@@ -4,7 +4,7 @@ import { recognizeText, parsePlayerData } from '@/utils/ocr';
 import { Player } from '@/types';
 
 interface RosterImageUploadProps {
-  onProcessComplete: (players: Omit<Player, 'id' | 'devTrait' | 'notes'>[]) => void;
+  onProcessComplete: (players: Omit<Player, 'id' | 'devTrait' | 'notes' | 'jerseyNumber'>[]) => void;
 }
 
 const RosterImageUpload: React.FC<RosterImageUploadProps> = ({ onProcessComplete }) => {
