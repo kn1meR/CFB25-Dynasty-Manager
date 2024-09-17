@@ -9,8 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { capitalizeName } from '@/utils';
 import { Recruit } from '@/types/playerTypes';
+import { generalPositions } from '@/types/playerTypes';
 
-const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
 const potentials = ['Elite', 'Star', 'Impact', 'Normal'];
 const starOptions = ['1', '2', '3', '4', '5'];
 
@@ -115,7 +115,7 @@ const RecruitingClassTracker: React.FC = () => {
                 <SelectValue placeholder="Position" />
               </SelectTrigger>
               <SelectContent>
-                {positions.map(pos => (
+                {generalPositions.map(pos => (
                   <SelectItem key={pos} value={pos}>{pos}</SelectItem>
                 ))}
               </SelectContent>

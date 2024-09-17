@@ -1,4 +1,5 @@
 // src/utils/validationUtils.ts
+import { positions } from "@/types/playerTypes";
 
 export const validateScore = (score: string): boolean => {
     // Score should be in the format "0-0" or "00-00" or "000-000"
@@ -21,6 +22,5 @@ export const validateScore = (score: string): boolean => {
   };
   
   export const validatePosition = (position: string): boolean => {
-    const validPositions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
-    return validPositions.includes(position);
+    return positions.includes(position);
   };

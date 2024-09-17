@@ -1,4 +1,6 @@
 // This file should contain types relating to a player's information (recruiting, roster, transfer, etc.)
+export const positions = ['QB', 'RB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT', 'LE', 'RE', 'DT', 'LOLB', 'MLB', 'ROLB', 'CB', 'FS', 'SS', 'K', 'P'];
+export const generalPositions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P', 'ATH'];
 
 export interface Player {
     id: number;
