@@ -15,6 +15,7 @@ import { positions } from '@/types/playerTypes';
 
 interface Player {
   id: number;
+  jerseyNumber: string; // New field
   name: string;
   position: string;
   year: string;
@@ -26,7 +27,7 @@ interface Player {
 const years = ['FR', 'FR (RS)', 'SO', 'SO (RS)', 'JR', 'JR (RS)', 'SR', 'SR (RS)'];
 const devTraits = ['Normal', 'Impact', 'Star', 'Elite'] as const;
 
-type SortField = 'name' | 'position' | 'year' | 'rating' | 'devTrait';
+type SortField = 'jerseyNumber' | 'name' | 'position' | 'year' | 'rating' | 'devTrait';
 
 const yearOrder: { [key: string]: number } = {
   'FR': 0, 'FR (RS)': 1, 'SO': 2, 'SO (RS)': 3, 'JR': 4, 'JR (RS)': 5, 'SR': 6, 'SR (RS)': 7
@@ -38,7 +39,7 @@ const devTraitOrder: { [key: string]: number } = {
 
 const Roster: React.FC = () => {
   const [players, setPlayers] = useLocalStorage<Player[]>('players', []);
-  const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id'>>({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
+  const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id'>>({ jerseyNumber: '', name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: 'asc' | 'desc' }>({ field: 'rating', direction: 'desc' });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -47,7 +48,14 @@ const Roster: React.FC = () => {
     setSortConfig({ field: 'rating', direction: 'desc' });
   }, [players]);
 
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
+
   const sortedPlayers = [...players].sort((a, b) => {
+    if (sortConfig.field === 'jerseyNumber') {
+      return sortConfig.direction === 'asc'
+        ? a.jerseyNumber.localeCompare(b.jerseyNumber, undefined, {numeric: true})
+        : b.jerseyNumber.localeCompare(a.jerseyNumber, undefined, {numeric: true});
+    }
     if (sortConfig.field === 'year') {
       const yearDiff = yearOrder[a.year] - yearOrder[b.year];
       return sortConfig.direction === 'asc' ? yearDiff : -yearDiff;
@@ -86,7 +94,7 @@ const Roster: React.FC = () => {
     if (validatePlayer(newPlayer)) {
       try {
         setPlayers([...players, { ...newPlayer, id: Date.now(), name: capitalizeName(newPlayer.name) }]);
-        setNewPlayer({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
+        setNewPlayer({ jerseyNumber: '', name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
         toast.success('Player added successfully!');
       } catch (error) {
         console.error('Error adding player:', error);
@@ -126,12 +134,12 @@ const Roster: React.FC = () => {
         : player
     ));
     setEditingId(null);
-    setNewPlayer({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
+    setNewPlayer({jerseyNumber: '', name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setNewPlayer({ name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
+    setNewPlayer({ jerseyNumber : '', name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   };
 
   const removePlayer = (id: number) => {
@@ -140,6 +148,10 @@ const Roster: React.FC = () => {
 
   const validatePlayer = (player: Omit<Player, 'id'>): boolean => {
     const newErrors: { [key: string]: string } = {};
+
+    if (!player.jerseyNumber.trim()) {
+      newErrors.jerseyNumber = 'Jersey number is required.';
+    }
 
     if (!validateName(player.name)) {
       newErrors.name = 'Invalid name. Please enter a non-empty name up to 100 characters.';
@@ -155,10 +167,11 @@ const Roster: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleProcessComplete = (newPlayers: Omit<Player, 'id' | 'devTrait' | 'notes'>[]) => {
+  const handleProcessComplete = (newPlayers: Omit<Player, 'id' | 'devTrait' | 'notes' | 'jerseyNumber'>[]) => {
     const playersWithIds = newPlayers.map(player => ({
       ...player,
       id: Date.now() + Math.random(),
+      jerseyNumber: '', // Default empty string for jersey number
       devTrait: 'Normal' as const,
       notes: ''
     }));
@@ -177,6 +190,12 @@ const Roster: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4">
+            <Input
+              value={newPlayer.jerseyNumber}
+              onChange={(e) => setNewPlayer({ ...newPlayer, jerseyNumber: e.target.value })}
+              placeholder="Jersey #"
+              className={errors.jerseyNumber ? 'border-red-500' : ''}
+            />
             <Input
               value={newPlayer.name}
               onChange={(e) => setNewPlayer({ ...newPlayer, name: e.target.value })}
@@ -251,35 +270,30 @@ const Roster: React.FC = () => {
           <Table>
             <thead>
               <tr>
-                <th className="text-center cursor-pointer" onClick={() => requestSort('name')}>
-                  Name {sortConfig.field === 'name' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                </th>
-                <th className="text-center cursor-pointer" onClick={() => requestSort('position')}>
-                  Position {sortConfig.field === 'position' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                </th>
-                <th className="text-center cursor-pointer" onClick={() => requestSort('year')}>
-                  Year {sortConfig.field === 'year' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                </th>
-                <th className="text-center cursor-pointer" onClick={() => requestSort('rating')}>
-                  Rating {sortConfig.field === 'rating' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                </th>
-                <th className="text-center cursor-pointer" onClick={() => requestSort('devTrait')}>
-                  Dev. Trait {sortConfig.field === 'devTrait' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                </th>
-                <th className="text-center">Notes</th>
-                <th className="text-center">Actions</th>
+                {['Jersey #', 'Name', 'Position', 'Year', 'Rating', 'Dev. Trait', 'Notes', 'Actions'].map((header, index) => (
+                  <th
+                    key={header}
+                    className={`text-center cursor-pointer table-hover-cell ${hoveredColumn === index ? 'bg-gray-100 dark:bg-gray-800' : ''}`}
+                    onClick={() => requestSort(header.toLowerCase() as SortField)}
+                    onMouseEnter={() => setHoveredColumn(index)}
+                    onMouseLeave={() => setHoveredColumn(null)}
+                  >
+                    {header} {sortConfig.field === header.toLowerCase() && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {sortedPlayers.map(player => (
-                <tr key={player.id}>
-                  <td className="text-center">{player.name}</td>
-                  <td className="text-center">{player.position}</td>
-                  <td className="text-center">{player.year}</td>
-                  <td className="text-center">{player.rating}</td>
-                  <td className="text-center">{player.devTrait || 'Normal'}</td>
-                  <td className="text-center">{player.notes}</td>
-                  <td className="text-center">
+                <tr key={player.id} className="table-hover-row">
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 0 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.jerseyNumber}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 1 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.name}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 2 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.position}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 3 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.year}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 4 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.rating}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 5 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.devTrait || 'Normal'}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 6 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>{player.notes}</td>
+                  <td className={`text-center table-hover-cell ${hoveredColumn === 7 ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>
                     <div className="flex justify-center space-x-2">
                       <Button onClick={() => startEditing(player)} size="sm">Edit</Button>
                       <Button onClick={() => removePlayer(player.id)} variant="destructive" size="sm">Remove</Button>
