@@ -11,6 +11,7 @@ import { capitalizeName } from '@/utils';
 import { validateName, validateRating, validatePosition } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import RosterImageUpload from './RosterImageUpload';
+import { positions } from '@/types/playerTypes';
 
 interface Player {
   id: number;
@@ -22,7 +23,6 @@ interface Player {
   notes: string;
 }
 
-const positions = ['QB', 'RB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT', 'LE', 'RE', 'DT', 'LOLB', 'MLB', 'ROLB', 'CB', 'FS', 'SS', 'K', 'P'];
 const years = ['FR', 'FR (RS)', 'SO', 'SO (RS)', 'JR', 'JR (RS)', 'SR', 'SR (RS)'];
 const devTraits = ['Normal', 'Impact', 'Star', 'Elite'] as const;
 

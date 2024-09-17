@@ -11,9 +11,8 @@ import { capitalizeName } from '@/utils';
 import { fbsTeams } from '@/utils/fbsTeams';
 import { Transfer } from '@/types/playerTypes';
 import { getTransfers } from '@/utils/localStorage';
+import { generalPositions } from '@/types/playerTypes';
 
-
-const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
 const starOptions = ['1', '2', '3', '4', '5'];
 
 const TransferPortalTracker: React.FC = () => {
@@ -140,7 +139,7 @@ const TransferPortalTracker: React.FC = () => {
                 <SelectValue placeholder="Position" />
               </SelectTrigger>
               <SelectContent>
-                {positions.map(pos => (
+                {generalPositions.map(pos => (
                   <SelectItem key={pos} value={pos}>{pos}</SelectItem>
                 ))}
               </SelectContent>
