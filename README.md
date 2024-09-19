@@ -34,17 +34,24 @@
   After installing node and all dependencies in `package.json`, running `npm run dev` in Terminal runs the application properly as intended.
 
 
-![image](https://github.com/user-attachments/assets/c517aa41-e343-4a29-8c04-62d0ae3c5961)
-![image](https://github.com/user-attachments/assets/25a58196-1c06-44d3-b5b2-8c45e02d59e4)
+![image](https://github.com/user-attachments/assets/5f81576e-aa6a-4d81-84c6-4c947c35908d)
 
-![image](https://github.com/user-attachments/assets/41c38434-5cc6-43ca-9e4f-4f7b871bc615)
+![image](https://github.com/user-attachments/assets/d14b1463-ca1e-4595-b515-456fec421223)
 
-![image](https://github.com/user-attachments/assets/c3fb7f18-ff13-4804-a637-435ea216161d)
-![image](https://github.com/user-attachments/assets/47c57abb-094c-47da-bd38-4fb8d26bc608)
-![image](https://github.com/user-attachments/assets/35a485e5-8506-4f7f-865e-95bba480e119)
-![image](https://github.com/user-attachments/assets/289dc44f-7636-4577-8165-a9d2672c5afe)
+![image](https://github.com/user-attachments/assets/c5755902-f864-4f11-8790-b1a28f3fb3bd)
 
+![image](https://github.com/user-attachments/assets/dd292162-40d2-4e0d-84cd-68c2e4a9577f)
 
-![image](https://github.com/user-attachments/assets/4f30f344-4724-4fca-aec5-e80b5ba1f09e)
-![image](https://github.com/user-attachments/assets/2d64fe3a-ca5b-4df9-9249-09975a660655)
-![image](https://github.com/user-attachments/assets/777ee91c-d884-46b1-8708-c9bdfd685583)
+![image](https://github.com/user-attachments/assets/aa6c87a7-55cc-4c1b-b754-81daaf503804)
+
+![image](https://github.com/user-attachments/assets/6fa8ecd1-d653-47fb-9018-a3b2cb98976d)
+
+![image](https://github.com/user-attachments/assets/014252ff-94f6-49fc-ab1c-55d3a2d5ac16)
+
+![image](https://github.com/user-attachments/assets/d7a992e7-27b0-48b0-bb49-bf2e3162cc06)
+
+![image](https://github.com/user-attachments/assets/ac4231aa-a26d-484b-8470-5586da00a5fd)
+
+![image](https://github.com/user-attachments/assets/5a4a9ef9-3d71-4521-befa-fd6b9a723aa6)
+
+![image](https://github.com/user-attachments/assets/7bcb8bd6-bc1b-4df4-8353-7c53729f7d0f)
