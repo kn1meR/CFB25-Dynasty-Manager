@@ -9,6 +9,7 @@ import { getCurrentYear, setCurrentYear, getSchedule, setSchedule, getYearStats,
 import { validateYear } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import { Calendar, Users, GraduationCap, User } from 'lucide-react';
 import { Game, YearStats } from '@/types/yearRecord';
 
 const TeamHome: React.FC = () => {
@@ -113,7 +114,7 @@ const TeamHome: React.FC = () => {
   const formatGameDisplay = (game: Game) => {
     switch (game.location) {
       case 'neutral':
-        return `vs ${game.opponent} (Neutral)`;
+        return `vs ${game.opponent}`;
       case '@':
         return `@ ${game.opponent}`;
       case 'vs':
@@ -140,11 +141,11 @@ const TeamHome: React.FC = () => {
         </Card>
 
         <Card>
-          <CardHeader className="text-xl font-semibold">Points</CardHeader>
+          <CardHeader className="text-xl font-semibold">Team Stats Summary</CardHeader>
           <CardContent>
-            <p className="text-center text-xl">
-              For: {yearStats.pointsScored} | Against: {yearStats.pointsAgainst}
-            </p>
+            <p>Avg. Points Scored: <strong>{(yearStats.pointsScored / (yearStats.wins + yearStats.losses)).toFixed(1)}</strong></p>
+            <p>Avg. Points Allowed: <strong>{(yearStats.pointsAgainst / (yearStats.wins + yearStats.losses)).toFixed(1)}</strong></p>
+            <p>Win Percentage: <strong>{((yearStats.wins / (yearStats.wins + yearStats.losses)) * 100).toFixed(1)}%</strong></p>
           </CardContent>
         </Card>
 
@@ -153,8 +154,11 @@ const TeamHome: React.FC = () => {
           <CardContent>
             <ul>
               {recentGames.map((game, index) => (
-                <li key={index} className="mb-2">
-                  Week {game.week}: {formatGameDisplay(game)} - {game.result} ({game.score})
+                <li key={index} className="mb-2 flex justify-between items-center">
+                  <span><strong>Week {game.week}:</strong> {formatGameDisplay(game)}</span>
+                  <span className={game.result === 'Win' ? 'text-green-500' : 'text-red-500'}>
+                    {game.result} ({game.score})
+                  </span>
                 </li>
               ))}
             </ul>
@@ -167,7 +171,7 @@ const TeamHome: React.FC = () => {
             <ul>
               {upcomingGames.map((game, index) => (
                 <li key={index} className="mb-2">
-                  Week {game.week}: {formatGameDisplay(game)}
+                  <strong>Week {game.week}:</strong> {formatGameDisplay(game)}
                 </li>
               ))}
             </ul>
@@ -175,12 +179,17 @@ const TeamHome: React.FC = () => {
         </Card>
 
         <Card>
-          <CardHeader className="text-xl font-semibold">Season Highlights</CardHeader>
+          <CardHeader className="text-xl font-semibold">Season Progress</CardHeader>
           <CardContent>
-            <p>Bowl Game: {yearStats.bowlGame || 'TBD'}</p>
-            <p>Bowl Result: {yearStats.bowlResult || 'TBD'}</p>
-            <p>Conference Standing: {yearStats.conferenceStanding || 'TBD'}</p>
-            <p>Players Drafted: {yearStats.playersDrafted}</p>
+            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div 
+                className="bg-blue-600 h-2.5 rounded-full" 
+                style={{width: `${(currentSchedule.filter(game => game.result !== 'N/A').length / currentSchedule.length) * 100}%`}}
+              ></div>
+            </div>
+            <p className="text-center mt-2">
+              {currentSchedule.filter(game => game.result !== 'N/A').length} of {currentSchedule.length} games played
+            </p>
           </CardContent>
         </Card>
 
@@ -189,13 +198,22 @@ const TeamHome: React.FC = () => {
           <CardContent>
             <div className="space-y-2">
               <Link href="/schedule" className="block">
-                <Button className="w-full">View Full Schedule</Button>
+                <Button className="w-full flex items-center justify-center">
+                  <Calendar className="mr-2" size={18} />
+                  View Full Schedule
+                </Button>
               </Link>
               <Link href="/roster" className="block">
-                <Button className="w-full">Manage Roster</Button>
+                <Button className="w-full flex items-center justify-center">
+                <User className="mr-2" size={18} />
+                Manage Roster
+                </Button>
               </Link>
               <Link href="/recruiting" className="block">
-                <Button className="w-full">Recruiting</Button>
+                <Button className="w-full flex items-center justify-center">
+                <GraduationCap className="mr-2" size={18} />
+                Recruiting
+                </Button>
               </Link>
             </div>
           </CardContent>

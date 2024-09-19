@@ -163,6 +163,8 @@ const Roster: React.FC = () => {
 
     if (!player.jerseyNumber.trim()) {
       newErrors.jerseyNumber = 'Jersey number is required.';
+    } else if (!/^\d+$/.test(player.jerseyNumber)) {
+      newErrors.jerseyNumber = 'Jersey number must be a valid number.';
     }
 
     if (!validateName(player.name)) {
@@ -190,6 +192,13 @@ const Roster: React.FC = () => {
     setPlayers(prevPlayers => [...prevPlayers, ...playersWithIds]);
   };
 
+  const handleJerseyNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '' || /^[0-9\b]+$/.test(value)) {
+      setNewPlayer({ ...newPlayer, jerseyNumber: value });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-center">Roster</h1>
@@ -204,8 +213,11 @@ const Roster: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4">
             <Input
               value={newPlayer.jerseyNumber}
-              onChange={(e) => setNewPlayer({ ...newPlayer, jerseyNumber: e.target.value })}
+              onChange={handleJerseyNumberChange}
               placeholder="Jersey #"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               className={errors.jerseyNumber ? 'border-red-500' : ''}
             />
             <Input
