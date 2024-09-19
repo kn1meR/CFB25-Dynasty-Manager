@@ -11,7 +11,8 @@ import { capitalizeName } from '@/utils';
 import { validateName, validateRating, validatePosition } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import RosterImageUpload from './RosterImageUpload';
-import { positions } from '@/types/playerTypes';
+import { defensivePositions, offensePositions, positions, specialTeamsPositions } from '@/types/playerTypes';
+import { Label } from './ui/label';
 
 interface Player {
   id: number;
@@ -27,7 +28,7 @@ interface Player {
 const years = ['FR', 'FR (RS)', 'SO', 'SO (RS)', 'JR', 'JR (RS)', 'SR', 'SR (RS)'];
 const devTraits = ['Normal', 'Impact', 'Star', 'Elite'] as const;
 
-type SortField = 'jerseyNumber' | 'name' | 'position' | 'year' | 'rating' | 'dev. trait';
+type SortField = 'jersey #' | 'name' | 'position' | 'year' | 'rating' | 'dev. trait';
 
 const yearOrder: { [key: string]: number } = {
   'FR': 0, 'FR (RS)': 1, 'SO': 2, 'SO (RS)': 3, 'JR': 4, 'JR (RS)': 5, 'SR': 6, 'SR (RS)': 7
@@ -39,19 +40,44 @@ const devTraitOrder: { [key: string]: number } = {
 
 const Roster: React.FC = () => {
   const [players, setPlayers] = useLocalStorage<Player[]>('players', []);
+  const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [newPlayer, setNewPlayer] = useState<Omit<Player, 'id'>>({ jerseyNumber: '', name: '', position: '', year: '', rating: '', devTrait: 'Normal', notes: '' });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [sortConfig, setSortConfig] = useState<{ field: SortField; direction: 'asc' | 'desc' }>({ field: 'rating', direction: 'desc' });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [posFilter, setPosFilter] = useState('all');
 
   useEffect(() => {
     setSortConfig({ field: 'rating', direction: 'desc' });
   }, [players]);
 
+  useEffect(() => {
+    // Filter Players based on Filter Rule
+    if(posFilter === 'all')
+      setFilteredPlayers(players);
+    else if (posFilter === 'offense') {
+      let filter = players.filter((player) => offensePositions.includes(player.position))
+      setFilteredPlayers(filter);
+    }
+    else if (posFilter === 'defense') {
+      let filter = players.filter((player) => defensivePositions.includes(player.position))
+      setFilteredPlayers(filter);
+    }
+    else if (posFilter === 'specialTeams') {
+      let filter = players.filter((player) => specialTeamsPositions.includes(player.position))
+      setFilteredPlayers(filter);
+    }
+    else {
+      let filter = players.filter((player) => player.position === posFilter);
+      setFilteredPlayers(filter);
+    }
+
+  }, [posFilter, players])
+
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
 
-  const sortedPlayers = [...players].sort((a, b) => {
-    if (sortConfig.field === 'jerseyNumber') {
+  const sortedPlayers = [...filteredPlayers].sort((a, b) => {
+    if (sortConfig.field === 'jersey #') {
       return sortConfig.direction === 'asc'
         ? a.jerseyNumber.localeCompare(b.jerseyNumber, undefined, {numeric: true})
         : b.jerseyNumber.localeCompare(a.jerseyNumber, undefined, {numeric: true});
@@ -275,8 +301,29 @@ const Roster: React.FC = () => {
       </Card>
 
       <Card>
-        <CardHeader className="text-xl font-semibold">Current Roster</CardHeader>
+        <CardHeader className="text-xl font-semibold">
+          Current Roster
+        </CardHeader>
         <CardContent>
+          <div className='w-1/6 pb-4'>
+          <Select
+            value={posFilter}
+            onValueChange={(value) => setPosFilter(value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder='All Positions'></SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem key={'all'} value='all'>All Positions</SelectItem>
+              <SelectItem key={'offense'} value='offense'>Offense</SelectItem>
+              <SelectItem key={'defense'} value='defense'>Defense</SelectItem>
+              <SelectItem key={'specialTeams'} value='specialTeams'>Special Teams</SelectItem>
+              {positions.map((position) => (
+                <SelectItem key={position} value={position}>{position}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          </div>
           <Table>
             <thead>
               <tr>
