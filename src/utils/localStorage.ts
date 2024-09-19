@@ -34,8 +34,12 @@ export const setSchedule = (year: number, schedule: Game[]): void => {
 export const calculateStats = (schedule: Game[]): YearStats => {
   let wins = 0, losses = 0, pointsScored = 0, pointsAgainst = 0;
   schedule.forEach(game => {
-    if (game.result === 'Win') wins++;
-    if (game.result === 'Loss') losses++;
+    if (game.result === 'Win') {
+      wins++;
+    }
+    if (game.result === 'Loss') {
+      losses++;
+    }
     if (game.score) {
       const [teamScore, opponentScore] = game.score.split('-').map(Number);
       if (!isNaN(teamScore) && !isNaN(opponentScore)) {

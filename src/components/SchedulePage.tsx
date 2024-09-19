@@ -281,7 +281,7 @@ const SchedulePage: React.FC = () => {
 
                         {fbsTeams.map(team => (
 
-                          <SelectItem key={team} value={team}>{team}</SelectItem>
+                          <SelectItem key={team.name} value={team.name}>{team.name + ' ' + team.nickName}</SelectItem>
 
                         ))}
 
