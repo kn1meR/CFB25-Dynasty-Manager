@@ -95,14 +95,18 @@ const TeamHome: React.FC = () => {
         bowlGame: '',
         bowlResult: '',
       });
-    
-      router.refresh();
-      toast.success('Year ended successfully. Welcome to the new season!');
-    } catch (error) {
-      console.error('Error ending year:', error);
-      toast.error('Failed to end the year. Please try again.');
-    }
+      
+    // Reset Top 25 rankings
+    const emptyTop25 = Array.from({length: 25}, (_, i) => ({ rank: i + 1, name: '', previousRank: null }));
+    localStorage.setItem('top25Rankings', JSON.stringify(emptyTop25));
+  
+    router.refresh();
+    toast.success('Year ended successfully. Welcome to the new season!');
+  } catch (error) {
+    console.error('Error ending year:', error);
+    toast.error('Failed to end the year. Please try again.');
   }
+}
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -223,7 +227,7 @@ const TeamHome: React.FC = () => {
       <div className="flex justify-center mt-6">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button className="px-8 py-4 text-lg">End Year</Button>
+            <Button variant="destructive" className="px-8 py-4 text-lg">End Year</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
