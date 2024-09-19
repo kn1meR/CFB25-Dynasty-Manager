@@ -11,7 +11,7 @@ import { capitalizeName } from '@/utils';
 import { validateName, validateRating, validatePosition } from '@/utils/validationUtils';
 import { toast } from 'react-hot-toast';
 import RosterImageUpload from './RosterImageUpload';
-import { positions } from '@/types/playerTypes';
+import { defensivePositions, offensePositions, positions, specialTeamsPositions } from '@/types/playerTypes';
 import { Label } from './ui/label';
 
 interface Player {
@@ -55,6 +55,18 @@ const Roster: React.FC = () => {
     // Filter Players based on Filter Rule
     if(posFilter === 'all')
       setFilteredPlayers(players);
+    else if (posFilter === 'offense') {
+      let filter = players.filter((player) => offensePositions.includes(player.position))
+      setFilteredPlayers(filter);
+    }
+    else if (posFilter === 'defense') {
+      let filter = players.filter((player) => defensivePositions.includes(player.position))
+      setFilteredPlayers(filter);
+    }
+    else if (posFilter === 'specialTeams') {
+      let filter = players.filter((player) => specialTeamsPositions.includes(player.position))
+      setFilteredPlayers(filter);
+    }
     else {
       let filter = players.filter((player) => player.position === posFilter);
       setFilteredPlayers(filter);
@@ -303,6 +315,9 @@ const Roster: React.FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem key={'all'} value='all'>All Positions</SelectItem>
+              <SelectItem key={'offense'} value='offense'>Offense</SelectItem>
+              <SelectItem key={'defense'} value='defense'>Defense</SelectItem>
+              <SelectItem key={'specialTeams'} value='specialTeams'>Special Teams</SelectItem>
               {positions.map((position) => (
                 <SelectItem key={position} value={position}>{position}</SelectItem>
               ))}
