@@ -1217,3 +1217,7 @@ export const fbsTeams: Team[] = [
     "abbrev": "WYO"
   }
 ]
+
+export function getTeamByName(name:string): Team|undefined {
+  return fbsTeams.find(team => team.name === name);
+}
