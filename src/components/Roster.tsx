@@ -215,11 +215,17 @@ const Roster: React.FC = () => {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-center">Roster</h1>
 
-      <RosterImageUpload onProcessComplete={handleProcessComplete} />
+      
 
       <Card>
         <CardHeader className="text-xl font-semibold">
           {editingId ? 'Edit Player' : 'Add New Player'}
+          <div className="flex justify-end">
+            <div className="text-sm">
+               <RosterImageUpload onProcessComplete={handleProcessComplete}
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4">
@@ -293,10 +299,17 @@ const Roster: React.FC = () => {
                 <Button onClick={saveEdit}>Save</Button>
                 <Button onClick={cancelEdit} variant="outline">Cancel</Button>
               </div>
+              
+              
+              
             ) : (
+              
               <Button onClick={addPlayer}>Add Player</Button>
+              
             )}
+            
           </div>
+        
         </CardContent>
       </Card>
 
