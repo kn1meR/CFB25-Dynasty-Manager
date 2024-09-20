@@ -66,7 +66,7 @@ const Top25Rankings: React.FC = () => {
             <SelectContent>
               <SelectItem value="unranked">  </SelectItem>
               {fbsTeams.map((teamName) => (
-                <SelectItem key={teamName} value={teamName}>{teamName}</SelectItem>
+                <SelectItem key={teamName.name} value={teamName.name}>{teamName.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>

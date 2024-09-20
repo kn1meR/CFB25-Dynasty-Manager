@@ -4,6 +4,7 @@ import { Recruit, Transfer } from "@/types/playerTypes";
 import { Award } from "@/types/statTypes";
 import { Game, YearRecord, YearStats } from "@/types/yearRecord";
 import { stat } from "fs";
+import { getTeamByName } from "./fbsTeams";
 
 export const getCurrentYear = (): number => {
   if (typeof window !== 'undefined') {
@@ -32,10 +33,22 @@ export const setSchedule = (year: number, schedule: Game[]): void => {
   }
 };
 export const calculateStats = (schedule: Game[]): YearStats => {
-  let wins = 0, losses = 0, pointsScored = 0, pointsAgainst = 0;
+  let wins = 0, losses = 0, pointsScored = 0, pointsAgainst = 0, conferenceWins = 0, conferenceLosses = 0;
+  let currentSchoolName = localStorage.getItem('schoolName') || '';
+  let currentSchool = getTeamByName(currentSchoolName);
   schedule.forEach(game => {
-    if (game.result === 'Win') wins++;
-    if (game.result === 'Loss') losses++;
+    let opponentConference = getTeamByName(game.opponent)?.conference;
+    let inConferenceGame:boolean = (currentSchool !== undefined && currentSchool?.conference !== 'Independents' && currentSchool?.conference === opponentConference)
+    if (game.result === 'Win') {
+      wins++;
+      if(inConferenceGame)
+        conferenceWins++;
+    }
+    if (game.result === 'Loss') {
+      losses++;
+      if(inConferenceGame)
+        conferenceLosses++;
+    }
     if (game.score) {
       const [teamScore, opponentScore] = game.score.split('-').map(Number);
       if (!isNaN(teamScore) && !isNaN(opponentScore)) {
@@ -48,8 +61,8 @@ export const calculateStats = (schedule: Game[]): YearStats => {
   return {
     wins,
     losses,
-    conferenceWins: 0, // You might want to calculate these based on your conference games
-    conferenceLosses: 0,
+    conferenceWins, 
+    conferenceLosses,
     pointsScored,
     pointsAgainst,
     playersDrafted: 0,

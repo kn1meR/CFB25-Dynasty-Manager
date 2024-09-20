@@ -139,7 +139,7 @@ const TeamHome: React.FC = () => {
           <CardHeader className="text-xl font-semibold text-center">Current Record</CardHeader>
           <CardContent>
             <p className="text-center text-5xl font-bold">
-              {yearStats.wins} - {yearStats.losses}
+              {yearStats.wins} - {yearStats.losses} ({yearStats.conferenceWins} - {yearStats.conferenceLosses})
             </p>
           </CardContent>
         </Card>
@@ -150,6 +150,7 @@ const TeamHome: React.FC = () => {
             <p>Avg. Points Scored: <strong>{(yearStats.pointsScored / (yearStats.wins + yearStats.losses)).toFixed(1)}</strong></p>
             <p>Avg. Points Allowed: <strong>{(yearStats.pointsAgainst / (yearStats.wins + yearStats.losses)).toFixed(1)}</strong></p>
             <p>Win Percentage: <strong>{((yearStats.wins / (yearStats.wins + yearStats.losses)) * 100).toFixed(1)}%</strong></p>
+            <p>Conference Win Percentage: <strong>{((yearStats.conferenceWins / (yearStats.conferenceWins + yearStats.conferenceLosses)) * 100).toFixed(1)}%</strong></p>
           </CardContent>
         </Card>
 

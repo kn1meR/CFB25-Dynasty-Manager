@@ -165,7 +165,7 @@ const TransferPortalTracker: React.FC = () => {
               </SelectTrigger>
               <SelectContent>
                 {fbsTeams.map(school => (
-                  <SelectItem key={school} value={school}>{school}</SelectItem>
+                  <SelectItem key={school.name} value={school.name}>{school.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
