@@ -5,6 +5,7 @@ import { Player } from '@/types';
 
 interface RosterImageUploadProps {
   onProcessComplete: (players: Omit<Player, 'id' | 'devTrait' | 'notes' | 'jerseyNumber'>[]) => void;
+  className?: string;
 }
 
 const RosterImageUpload: React.FC<RosterImageUploadProps> = ({ onProcessComplete }) => {
@@ -31,7 +32,7 @@ const RosterImageUpload: React.FC<RosterImageUploadProps> = ({ onProcessComplete
 
   return (
     <div>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input type="file" accept="image/*" onChange={handleImageChange} className="text-sm"/>
       <Button onClick={handleUpload} disabled={!image}>
         Upload and Process
       </Button>
