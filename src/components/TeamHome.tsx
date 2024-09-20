@@ -139,7 +139,8 @@ const TeamHome: React.FC = () => {
           <CardHeader className="text-xl font-semibold text-center">Current Record</CardHeader>
           <CardContent>
             <p className="text-center text-5xl font-bold">
-              {yearStats.wins} - {yearStats.losses} ({yearStats.conferenceWins} - {yearStats.conferenceLosses})
+              {yearStats.wins} - {yearStats.losses} 
+              <br />({yearStats.conferenceWins} - {yearStats.conferenceLosses})
             </p>
           </CardContent>
         </Card>
